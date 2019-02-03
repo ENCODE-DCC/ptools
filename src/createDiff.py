@@ -57,39 +57,39 @@ def MakeDiff(BAM):
 	if AScolumn==-1 and MDcolumn==-1:
 		if any((c in chars) for c in cigar):
 			fseq=getfseq(cigar,seq)
-			print("%s\t%s\t%s" % (cigar, fseq, Qualseq))
+			print("%s\t%s" % (cigar, fseq))
 		else:
 			print("%s" % (Qualseq))
 	elif AScolumn!=-1 and MDcolumn==-1:
 		if any((c in chars) for c in cigar):
 			fseq=getfseq(cigar,seq)
 			AS=readarray[AScolumn]
-			print("%s\t%s\t%s\t%s" % (cigar, fseq, Qualseq, AS))
+			print("%s\t%s\t%s" % (cigar, fseq, AS))
 		else:
 			AS=readarray[AScolumn]
-			print("%s\t%s" % (Qualseq, AS))
+			print("%s" % (AS))
 	elif AScolumn==-1 and MDcolumn!=-1:
 		if any((c in chars) for c in cigar):
 			fseq=getfseq(cigar,seq)
 			a=readarray[MDcolumn].split("\n")
 			MD=a[0]
-			print("%s\t%s\t%s\t%s" % (cigar, fseq, Qualseq, MD))
+			print("%s\t%s\t%s" % (cigar, fseq, MD))
 		else:
 			a=readarray[MDcolumn].split("\n")
 			MD=a[0]
-			print("%s\t%s" % (Qualseq, MD))
+			print("%s" % ( MD))
 	else:
 		if any((c in chars) for c in cigar):
 			fseq=getfseq(cigar,seq)
 			a=readarray[MDcolumn].split("\n")
 			MD=a[0]
 			AS=readarray[AScolumn]
-			print("%s\t%s\t%s\t%s\t%s" % (cigar, fseq, Qualseq, AS, MD))
+			print("%s\t%s\t%s\t%s" % (cigar, fseq, AS, MD))
 		else:
 			a=readarray[MDcolumn].split("\n")
 			MD=a[0]
 			AS=readarray[AScolumn]
-			print("%s\t%s\t%s" % (Qualseq, AS, MD))
+			print("%s\t%s" % (AS, MD))
 
       
 
