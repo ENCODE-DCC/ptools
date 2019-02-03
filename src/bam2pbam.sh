@@ -129,7 +129,7 @@ echo "generating radioactive and nonradioactive part of the bam file"
 
 if [ $param1 == "file" ]
 then
-	module load Python
+	#module load Python
 	samtools index $param4
 	awk  '{ printf( "%s ", $1 ); } END { printf( "\n" ); }' $file > $WORK_DIR/tmp
 	samtools view -h $param4 $(awk -F[.] '{print $1}' $WORK_DIR/tmp) | samtools view -h -bS -  > $WORK_DIR/tmp.bam
