@@ -133,7 +133,7 @@ then
 	samtools index $param4
 	awk  '{ printf( "%s ", $1 ); } END { printf( "\n" ); }' $file > $WORK_DIR/tmp
 	samtools view -h $param4 $(awk -F[.] '{print $1}' $WORK_DIR/tmp) | samtools view -h -bS -  > $WORK_DIR/tmp.bam
-	samtools view $WORK_DIR/tmp.bam | python pbam2bam.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
+	samtools view $WORK_DIR/tmp.bam | python getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
 	awk '!seen[$0]++' $WORK_DIR/radio.txt | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	rm $WORK_DIR/radio.txt
 	rm $WORK_DIR/tmp.bam
