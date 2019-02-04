@@ -151,7 +151,7 @@ fi
 
 if [ $param1 != "file" ]
 then
-	samtools view -h -b -S $param4 > $WORK_DIR/Radio.bam
+	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
 fi
 
 input=$WORK_DIR/Radio.bam
