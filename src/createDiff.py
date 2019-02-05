@@ -38,7 +38,7 @@ def MakeDiff(BAM):
 	readarray = BAM.split('\t')
 	readID = readarray[0]
 	seq = readarray[9]
-	Qualseq = *
+	Qualseq = '*'
 	cigar =  readarray[5]
 	AS=[]
 	MD=[]
