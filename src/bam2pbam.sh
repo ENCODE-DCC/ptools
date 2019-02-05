@@ -43,7 +43,7 @@ while [ -n "$1" ]; do # while loop starts
         echo "-q for operation <file/mis/indel/split/all>, default=all, if file then followed by the file name
 format of the file Chr:loc-loc
 -ft for output file type <BAM/SAM/CRAM>, default=BAM
--r  reference file in .gz format, mandatory
+-r  reference file in .fasta format, mandatory
 -in name of the input file, mandatory
 -rl read length, default=learned from the file
 samtools, picard and python3 should be in the path"
