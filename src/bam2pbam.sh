@@ -254,7 +254,7 @@ fi
 
 if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
 then
-	v2=${reffa::-3}
+	v2=$reffa
 	echo "ref file is $v2"
 	samtools view -T $v2 -C -o $param4.p.cram $param4.p.bam
 	rm $param4.p.bam
