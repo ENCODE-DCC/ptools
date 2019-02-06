@@ -36,6 +36,7 @@ RUN git clone --branch 1.4 --single-branch https://github.com/samtools/samtools.
 RUN mkdir -p ptools/src
 COPY /src/bam2pbam/* ptools/src/
 COPY /src/pbam2bam/* ptools/src/
+ENV PATH="/software/ptools/src:${PATH}"
 
 ARG GIT_COMMIT_HASH
 ENV GIT_HASH=${GIT_COMMIT_HASH}
