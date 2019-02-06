@@ -63,9 +63,27 @@ jobs:
             docker logout
           no_output_timeout: 30m
 
+  push_template:
+      <<: *defaults
+      steps:
+        - checkout
+        - setup_remote_docker
+        - run: *make_tag
+        - run:
+            command: |
+              source ${BASH_ENV}
+              docker pull $TAG
+              docker login -u=${QUAY_ROBOT_USER} -p=${QUAY_ROBOT_USER_TOKEN} quay.io
+              docker tag $TAG quay.io/encode-dcc/mirna-seq-pipeline:template 
+              docker push quay.io/encode-dcc/mirna-seq-pipeline:template
+              docker logout
+            no_output_timeout: 30m
 # Workflow
 workflows:
   version: 2
   build_workflow:
     jobs:
       - build
+      - push_template:
+          requires:
+            - build
