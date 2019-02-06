@@ -101,7 +101,8 @@ as=$(($rL*2))
 #set operation
 if [ $param1 == "n" ] || [ $param1 == "all" ]
 then
-	q='/S|\H|\I|\D|\X/'
+	q='S|H|I|D|X'
+	echo $q
 fi
 if [ $param1 == "mis" ]
 then
@@ -109,16 +110,16 @@ then
 fi
 if [ $param1 == "indel" ]
 then
-	q='\I|\D'
+	q='I|D'
 fi
 if [ $param1 == "split" ]
 then
-	q='\S|H'
+	q='S|H'
 fi
 if [ $param1 == "file" ]
 then
 	file=$param12
-	q='/S|\H|\I|\D|\X/'
+	q='S|H|I|D|X'
 fi
 	
 #get the number of the columns
@@ -144,6 +145,9 @@ then
 	then
         	java -jar picard.jar FilterSamReads I=$param4 O=$WORK_DIR/nonRadio.bam READ_LIST_FILE=$WORK_DIR/RadioReadList.txt FILTER=excludeReadList
         	rm $WORK_DIR/RadioReadList.txt
+		samtools merge $WORK_DIR/both.bam $WORK_DIR/nonRadio.bam $WORK_DIR/Radio.bam
+                samtools sort $WORK_DIR/both.bam -o $WORK_DIR/bothsorted.bam
+                rm $WORK_DIR/both.bam
 	else
 		samtools view -h -b -S $param4 > $WORK_DIR/nonRadio.bam
 		samtools merge $WORK_DIR/both.bam $WORK_DIR/nonRadio.bam $WORK_DIR/Radio.bam
@@ -216,11 +220,11 @@ $loc view -h $input | awk '$0 ~ /^@/ || $6 !~ /N/' | samtools view -bS - > $WORK
 
 
 #create p-bam from nonintronic
-$loc view $WORK_DIR/nonintronic.bam | awk -v var="$ASprint" -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ '"$q"') {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}} else {$6="'"$rL"'M"; {for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/preads_nonintronic.txt
+$loc view $WORK_DIR/nonintronic.bam | awk -v var="$ASprint" -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ "vv") {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}} else {$6="'"$rL"'M"; {for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/preads_nonintronic.txt
 
 #separate intronic reads
-$loc view $WORK_DIR/intronic.bam | awk -v var="$ASprint"  -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ '"$q"') {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/intronic1.txt
-$loc view $WORK_DIR/intronic.bam | awk -v var="$q" '{if ($6 ~ var) {print $0}}' > $WORK_DIR/intronic2.txt
+$loc view $WORK_DIR/intronic.bam | awk -v var="$ASprint"  -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ "vv") {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/intronic1.txt
+$loc view $WORK_DIR/intronic.bam | awk -v var="$q" '{if ($6 ~ "var") {print $0}}' > $WORK_DIR/intronic2.txt
 
 #create p-bam from intronic
 cat $WORK_DIR/intronic2.txt | awk '{print $6}' | awk -F'[N]' '{print $1}' | awk -F'[MDSXIH]' '{print $NF}' > $WORK_DIR/lengthOFintron.txt
