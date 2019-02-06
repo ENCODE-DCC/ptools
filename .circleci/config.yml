@@ -7,17 +7,16 @@
 defaults: &defaults
   docker:
     - image: circleci/buildpack-deps:xenial-scm
-  working_directory: ~/mirna-seq-pipeline
+  working_directory: ~/ptools
 
 python_defaults: &python_defaults
   docker:
-    - image: quay.io/encode-dcc/mirna-seq-pipeline:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
-  working_directory: ~/mirna-seq-pipeline
-
+    - image: quay.io/encode-dcc/ptools:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
+  working_directory: ~/ptools
 machine_defaults: &machine_defaults
   machine:
     image: circleci/classic:latest
-  working_directory: ~/mirna-seq-pipeline
+  working_directory: ~/ptools
 
 make_tag: &make_tag
   name: make docker image tag
@@ -74,8 +73,8 @@ jobs:
               source ${BASH_ENV}
               docker pull $TAG
               docker login -u=${QUAY_ROBOT_USER} -p=${QUAY_ROBOT_USER_TOKEN} quay.io
-              docker tag $TAG quay.io/encode-dcc/mirna-seq-pipeline:template 
-              docker push quay.io/encode-dcc/mirna-seq-pipeline:template
+              docker tag $TAG quay.io/encode-dcc/ptools:template 
+              docker push quay.io/encode-dcc/ptools:template
               docker logout
             no_output_timeout: 30m
 # Workflow
