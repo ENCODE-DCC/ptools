@@ -24,7 +24,7 @@ Pipeline to convert bams into pbams
 
   samtools, picard and python3 should be in the path 
   
-  # pbam2bam
+# pbam2bam
 Pipeline to convert pbams into bams
 
 * requires (1) python 3
