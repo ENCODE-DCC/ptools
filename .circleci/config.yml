@@ -1,5 +1,5 @@
 # CircleCI 2.0 configuration file
-# for ENCODE PTOOLS-PIPELINE
+# for ENCODE LONG-READ-RNA-SEQ-PIPELINE
 # Maintainer: Otto Jolanki
 
 # Defaults and functions
@@ -11,8 +11,9 @@ defaults: &defaults
 
 python_defaults: &python_defaults
   docker:
-    - image: quay.io/encode-dcc/ptools:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
+    - image: quay.io/encode-dcc/long-read-rna-pipeline:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
   working_directory: ~/ptools
+
 machine_defaults: &machine_defaults
   machine:
     image: circleci/classic:latest
