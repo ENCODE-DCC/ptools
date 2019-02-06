@@ -146,12 +146,16 @@ then
         	rm $WORK_DIR/RadioReadList.txt
 	else
 		samtools view -h -b -S $param4 > $WORK_DIR/nonRadio.bam
+		samtools merge $WORK_DIR/both.bam $WORK_DIR/nonRadio.bam $WORK_DIR/Radio.bam
+		samtools sort $WORK_DIR/both.bam -o $WORK_DIR/bothsorted.bam
+		rm $WORK_DIR/both.bam
 	fi
 fi
 
 if [ $param1 != "file" ]
 then
 	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
+	samtools sort $WORK_DIR/Radio.bam -o $WORK_DIR/bothsorted.bam
 fi
 
 input=$WORK_DIR/Radio.bam
@@ -196,13 +200,7 @@ done
 
 echo "Creating the diff file"
 #diff from the radio
-$loc view $input | python createDiff.py > $WORK_DIR/radio.diff
-if [ ! -f $WORK_DIR/nonRadio.bam ]; then
-	cp $WORK_DIR/radio.diff $WORK_DIR/temp.diff
-else
-	samtools view $WORK_DIR/nonRadio.bam | python createDiff.py > $WORK_DIR/nonradio.diff
-	cat $WORK_DIR/radio.diff $WORK_DIR/nonradio.diff > $WORK_DIR/temp.diff
-fi
+$loc view $WORK_DIR/bothsorted.bam | python createDiff.py > $WORK_DIR/temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
@@ -210,12 +208,6 @@ python compress.py $WORK_DIR/temp.diff $param4\.diff
 
 #remove the temporary uncompressed file
 rm $WORK_DIR/temp.diff
-rm $WORK_DIR/radio.diff
-if [ -f $WORK_DIR/nonradio.diff ]
-then
-	rm $WORK_DIR/nonradio.diff
-fi
-
 
 echo "Creating the pbam file"
 #split the bam file as intronic and nonintronic bam
@@ -244,12 +236,14 @@ awk '{print $0}' $WORK_DIR/all.txt | samtools view -h -bS - > $WORK_DIR/tmp.p.ba
 
 if [ -f $WORK_DIR/nonRadio.bam ]
 then
-	samtools merge $param4.p.bam $WORK_DIR/tmp.p.bam nonRadio.bam
-fi
+	samtools merge $WORK_DIR/tmp2.p.bam $WORK_DIR/tmp.p.bam nonRadio.bam
+	samtools sort $WORK_DIR/tmp2.p.bam -o $param4.p.bam
+fi 
 
 if [ ! -f $WORK_DIR/nonRadio.bam ]
 then
-        samtools view -h -b -S $WORK_DIR/tmp.p.bam > $param4.p.bam
+        samtools view -h -b -S $WORK_DIR/tmp.p.bam > $WORK_DIR/tmp2.p.bam 
+	samtools sort $WORK_DIR/tmp2.p.bam -o $param4.p.bam
 fi
 
 if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
