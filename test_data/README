@@ -1,0 +1,13 @@
+test.sorted.bam is the example input file. Make sure to have "human_g1k_v37.fasta" availabe
+
+*to create the pbam file use below
+
+	sh bam2pbam.sh -in ../../test_data/test.sorted.bam -r human_g1k_v37.fasta
+
+this will create ../../test_data/test.sorted.bam.p.bam and ../../test_data/test.sorted.bam.diff files
+
+*to go back to the bam file from pbam file
+
+	sh pbam2bam.sh -in ../../test_data/test.sorted.bam.p.bam -r human_g1k_v37.fasta -p ../../test_data/ -d test.sorted.bam.diff
+
+this will create ../../test_data/test.sorted.bam.p.bam.bam file
