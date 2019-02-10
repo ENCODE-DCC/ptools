@@ -112,6 +112,7 @@ if [ $param6 == "BAM" ] || [ $param6 == "bam" ]
 then
 	
 	samtools view $param1 | python pbam2bam.py $reffa $param3 $param4 $WORK_DIR $WORK_DIR/header.txt $param5 | samtools view -bS - > $param1\.bam
+	echo "$param1\.bam is created"
 	rm -rf $WORK_DIR
 fi
 
@@ -120,7 +121,8 @@ fi
 if [ $param6 == "SAM" ] || [ $param6 == "sam" ]
 then
         samtools view $param1 | python pbam2bam.py $reffa $param3 $param4 $WORK_DIR $WORK_DIR/header.txt $param5 | samtools view  > $param1\.sam
-        rm -rf $WORK_DIR
+        echo "$param1\.sam is created."
+	rm -rf $WORK_DIR
 fi
 
 if [ $param6 == "CRAM" ] || [ $param6 == "cram" ]
@@ -128,7 +130,8 @@ then
         samtools view $param1 | python pbam2bam.py $reffa $param3 $param4 $WORK_DIR $WORK_DIR/header.txt $param5 | samtools view -bS - > $WORK_DIR/$param1\.bam
 	v2=$reffa
         echo "ref file is $v2"
-        samtools view -T $v2 -C -o $param1.cram $WORK_DIR/$param1\.bam        
+        samtools view -T $v2 -C -o $param1.cram $WORK_DIR/$param1\.bam
+	echo "$param1.cram is created"        
 	rm -rf $WORK_DIR
 fi
 
