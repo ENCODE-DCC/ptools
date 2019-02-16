@@ -23,14 +23,10 @@ workflow bam2pbam{
                 String? operation
                 String? cleanup_file
                 String? output_format
-                String cmdLineRL = if isDefined(read_length) then "-rl ${read_length}" else ""
-                String cmdLineOP = if isDefined(operation) then "-q ${operation}" else ""
-                String cmdLineCF = if isDefined(cleanup_file) then "${cleanup_file}" else ""
-                String cmdLineOF = if isDefined(output_format) then "-ft ${output_format}" else ""
-    		String input_file
+   		String input_file
         	String ref_file
 
 		command{
-			sh $(which bam2pbam.sh) ${cmdLineRL} ${cmdLineOP} ${cmdLineCF} ${cmdLineOF} -in ${input_file} -r ${ref_file}
+			sh /ysm-gpfs/pi/gerstein/gamze/privaseq3-codes/pTools/generalization/ptools/src/bam2pbam/bam2pbam.sh ${"-rl " + read_length} ${"-q " + operation} ${cleanup_file} ${"-ft " + output_format} -in ${input_file} -r ${ref_file}
 		}
 	} 
