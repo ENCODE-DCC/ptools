@@ -1,4 +1,15 @@
+#!/bin/sh
+
+#SBATCH -p bigmem
+#SBATCH -J trnsq -t 120:00:00
+#SBATCH -c 1 --mem-per-cpu=180000
+
+
 #### Gamze Gursoy 2018#####
+
+module load Python
+
+
 
 #set defaults"
 param1="all"
@@ -75,7 +86,7 @@ fi
 #create a temporary folder
 # the directory of the script
 echo "creating a temporary directory"
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=/ysm-gpfs/pi/gerstein/gamze/privaseq3-codes/pTools/generalization/ptools/src
 
 # the temp directory used, within $DIR
 # omit the -p parameter to create a temporal directory in the default location
@@ -220,10 +231,10 @@ $loc view -h $input | awk '$0 ~ /^@/ || $6 !~ /N/' | samtools view -bS - > $WORK
 
 
 #create p-bam from nonintronic
-$loc view $WORK_DIR/nonintronic.bam | awk -v var="$ASprint" -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ "vv") {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}} else {$6="'"$rL"'M"; {for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/preads_nonintronic.txt
+$loc view $WORK_DIR/nonintronic.bam | awk -v var="$ASprint" -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ vv) {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}} else {$6="'"$rL"'M"; {for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/preads_nonintronic.txt
 
 #separate intronic reads
-$loc view $WORK_DIR/intronic.bam | awk -v var="$ASprint"  -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ "vv") {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/intronic1.txt
+$loc view $WORK_DIR/intronic.bam | awk -v var="$ASprint"  -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ vv) {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > $WORK_DIR/intronic1.txt
 $loc view $WORK_DIR/intronic.bam | awk -v var="$q" '{if ($6 ~ "var") {print $0}}' > $WORK_DIR/intronic2.txt
 
 #create p-bam from intronic
