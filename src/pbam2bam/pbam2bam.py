@@ -31,34 +31,46 @@ def ModifySequence(SOI, loc, mod):
         for i in xrange(0,len(loc)):
                 modtype=loc[i][1]
                 modloc=int(loc[i][0])
+		if (modtype == "M"):
+                	BB.append(SOI[SOI_index:SOI_index+modloc])
+                	SOI_index = (SOI_index + modloc)
 
-                if (modtype == "M"):
-                        BB.append(SOI[SOI_index:SOI_index+modloc])
-                        SOI_index = (SOI_index + modloc)
+        	if (modtype == "I"):
+                	BB.append(mod[j][0])
+                	j+=1
 
+        	if (modtype == "X"):
+                	BB.append(SOI[SOI_index:SOI_index+modloc])
+                	BB[i]=mod[j][0]
+                	SOI_index = SOI_index + len(mod[j][0])
+                	if (len(mod) > 1):
+                        	j=j+1
 
-                if (modtype == "I"):
-                        BB.append(mod[j][0])
-                        j+=1
+        	if (modtype == "D"): #deletion
+                	BB.append(' ')
+                	SOI_index = SOI_index + modloc
 
-                if (modtype == "X"):
-                        BB.append(SOI[SOI_index:SOI_index+modloc])
-                        BB[i]=mod[j][0]
-                        SOI_index = SOI_index + len(mod[j][0]) 
+        	if (modtype == "N"): #skipped region/intron/same as deletion
+                	BB.append(' ')
+                	SOI_index = SOI_index + modloc
 
-                if (modtype == "D"): #deletion
-                        SOI_index = SOI_index + modloc
+        	if (modtype == "H"): #hardclip/ essentially the same as a deletion
+                	BB.append(' ')
+                	SOI_index = SOI_index + modloc #not included in SEQ
 
-                if (modtype == "N"): #skipped region/intron/same as deletion
-                        SOI_index = SOI_index + modloc
-
-                if (modtype == "H"): #hardclip/ essentially the same as a deletion
-                        SOI_index = SOI_index + modloc #not included in SEQ
-
-                if (modtype == "S"): #for our purposes, a softclip essentially has the same effect as a mismatch 
-			BB.append(mod[j][0])
-                        j+=1                        
-        BB="".join(BB)
+        	if (modtype == "S"): #for our purposes, a softclip essentially has the same effect as a mismatch 
+                	BB.append(SOI[SOI_index:SOI_index+modloc])
+                	BB[i]=mod[j][0]
+                	SOI_index = SOI_index + len(mod[j][0])
+                	if (len(mod) > 1):
+                        	j=j+1
+#print(BB)
+	while True:
+    		try:
+        		BB.remove(' ')
+    		except ValueError:
+        		break
+	BB="".join(BB)
         return BB
 
 
