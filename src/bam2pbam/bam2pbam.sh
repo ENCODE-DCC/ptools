@@ -1,13 +1,8 @@
 #!/bin/sh
 
-#SBATCH -p bigmem
-#SBATCH -J trnsq -t 120:00:00
-#SBATCH -c 1 --mem-per-cpu=180000
-
-
 #### Gamze Gursoy 2018#####
 
-module load Python
+#module load Python
 
 
 
@@ -86,7 +81,7 @@ fi
 #create a temporary folder
 # the directory of the script
 echo "creating a temporary directory"
-DIR=/ysm-gpfs/pi/gerstein/gamze/privaseq3-codes/pTools/generalization/ptools/src
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # the temp directory used, within $DIR
 # omit the -p parameter to create a temporal directory in the default location
