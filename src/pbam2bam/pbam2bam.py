@@ -24,7 +24,7 @@ with open(sys.argv[1], 'rb') as f:
         ref=PrintSequence.Lookup(f)
 
 
-def ModifySequence(SOI, loc, mod):
+def ModifySequence(SOI, loc, mod, rl):
         BB=[]
         SOI_index=0;
         j=0
@@ -221,7 +221,7 @@ for lineA, lineB in zip(fileA, fileB):
        	        l2=col2parser(modcigar)
        		readlength=countbps(l1)
                 SOI=ref.query(chrom, startPos-1, readlength)
-                final=ModifySequence(SOI, l1, l2)
+                final=ModifySequence(SOI, l1, l2, readlength)
 		if (len(MDarray)==1):
 			seq=final.upper()
 		else:
@@ -264,7 +264,7 @@ for lineA, lineB in zip(fileA, fileB):
                 l2=col2parser(modcigar)
                 readlength=countbps(l1)
                 SOI=ref.query(chrom, startPos-1, readlength)
-                final=ModifySequence(SOI, l1, l2)
+                final=ModifySequence(SOI, l1, l2, readlength)
                 if (len(MDarray)==1):
                         seq=final.upper()
                 else:
@@ -306,7 +306,7 @@ for lineA, lineB in zip(fileA, fileB):
                 l2=col2parser(modcigar)
 	        readlength=countbps(l1)
                 SOI=ref.query(chrom, startPos-1, readlength)
-                final=ModifySequence(SOI, l1, l2)
+                final=ModifySequence(SOI, l1, l2,readlength)
                 seq=final.upper()
                 qual=pbam[10]
                 pbam[AS]=difflist[CheckAS(diff)]
@@ -352,7 +352,7 @@ for lineA, lineB in zip(fileA, fileB):
                 l2=col2parser(modcigar)
                 readlength=countbps(l1)
                 SOI=ref.query(chrom, startPos-1, readlength)
-                final=ModifySequence(SOI, l1, l2)
+                final=ModifySequence(SOI, l1, l2,readlength)
                 seq=final.upper()
                 qual=pbam[10]
                 for i in range(0,5):
@@ -364,6 +364,10 @@ for lineA, lineB in zip(fileA, fileB):
                 bam[10]=qual
                 for i in range(11,nColpbam):
                       bam[i]=pbam[i]
+	if len(bam[9])<int(RL):
+                a=int(RL)-len(bam[9])
+                for i in range(0,a):
+                        bam[9] = bam[9] + "N"
         nbam=str(bam[0])+'\t'
         for i in range(1,nColpbam-1):
                 nbam=nbam+str(bam[i])+'\t'
