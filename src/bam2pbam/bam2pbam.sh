@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #### Gamze Gursoy 2018#####
 
