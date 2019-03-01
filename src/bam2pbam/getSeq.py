@@ -30,12 +30,12 @@ import io
 hed=open(sys.argv[2],"r")
 header=[]
 for line in hed:
-	header.append(line.split('\n')[0])
+    header.append(line.split('\n')[0])
 hed.close()
 
 
 for i in range(0,len(header)):
-	print("%s" % header[i])
+    print("%s" % header[i])
 
 fileB = sys.stdin
 RL=sys.argv[3]
