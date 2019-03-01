@@ -27,6 +27,6 @@ workflow bam2pbam{
         	String ref_file
 
 		command{
-			sh /ysm-gpfs/pi/gerstein/gamze/privaseq3-codes/pTools/generalization/ptools/src/bam2pbam/bam2pbam.sh ${"-rl " + read_length} ${"-q " + operation} ${cleanup_file} ${"-ft " + output_format} -in ${input_file} -r ${ref_file}
+			bam2pbam.sh ${"-rl " + read_length} ${"-q " + operation} ${cleanup_file} ${"-ft " + output_format} -in ${input_file} -r ${ref_file}
 		}
 	} 
