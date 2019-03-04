@@ -52,7 +52,7 @@ format of the file Chr:loc-loc
 -r  reference file in .fasta format, mandatory
 -in name of the input file, mandatory
 -rl read length, default=learned from the file
-samtools, picard and python3 should be in the path"
+samtools, picard and python33 should be in the path"
 	;;
       *) echo "Option $1 not recognized" ;;
     esac
@@ -140,7 +140,7 @@ then
 	samtools index $param4
 	awk  '{ printf( "%s ", $1 ); } END { printf( "\n" ); }' $file > $WORK_DIR/tmp
 	samtools view -h $param4 $(awk -F[.] '{print $1}' $WORK_DIR/tmp) | samtools view -h -bS -  > $WORK_DIR/tmp.bam
-	samtools view $WORK_DIR/tmp.bam | python getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
+	samtools view $WORK_DIR/tmp.bam | python3 getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
 	awk '!seen[$0]++' $WORK_DIR/radio.txt | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	rm $WORK_DIR/radio.txt
 	rm $WORK_DIR/tmp.bam
@@ -164,7 +164,7 @@ fi
 
 if [ $param1 != "file" ]
 then
-	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
+	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python3 getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	samtools sort $WORK_DIR/Radio.bam -o $WORK_DIR/bothsorted.bam
 fi
 
@@ -210,11 +210,11 @@ done
 
 echo "Creating the diff file"
 #diff from the radio
-$loc view $WORK_DIR/bothsorted.bam | python createDiff.py > $WORK_DIR/temp.diff
+$loc view $WORK_DIR/bothsorted.bam | python3 createDiff.py > $WORK_DIR/temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python compress.py $WORK_DIR/temp.diff $param4\.diff
+python3 compress.py $WORK_DIR/temp.diff $param4\.diff
 
 #remove the temporary uncompressed file
 rm $WORK_DIR/temp.diff
@@ -244,32 +244,38 @@ paste $WORK_DIR/MNM.txt $WORK_DIR/intronic2.txt | awk -v var="$t" -v var2=$ntabs
 cat $WORK_DIR/header.txt $WORK_DIR/intronic1.txt $WORK_DIR/intronicreads.txt $WORK_DIR/preads_nonintronic.txt > $WORK_DIR/all.txt
 awk '{print $0}' $WORK_DIR/all.txt | samtools view -h -bS - > $WORK_DIR/tmp.p.bam
 
+
+fbname=$(basename "$param4" | cut -d. -f1)
+
+
+
+
 if [ -f $WORK_DIR/nonRadio.bam ]
 then
 	samtools merge $WORK_DIR/tmp2.p.bam $WORK_DIR/tmp.p.bam nonRadio.bam
-	samtools sort $WORK_DIR/tmp2.p.bam -o $param4.p.bam
+	samtools sort $WORK_DIR/tmp2.p.bam -o $fbname.p.bam
 fi 
 
 if [ ! -f $WORK_DIR/nonRadio.bam ]
 then
         samtools view -h -b -S $WORK_DIR/tmp.p.bam > $WORK_DIR/tmp2.p.bam 
-	samtools sort $WORK_DIR/tmp2.p.bam -o $param4.p.bam
+	samtools sort $WORK_DIR/tmp2.p.bam -o $fbname.p.bam
 fi
 
 if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
 then
 	v2=$reffa
 	echo "ref file is $v2"
-	samtools view -T $v2 -C -o $param4.p.cram $param4.p.bam
-	rm $param4.p.bam
-	echo "$param4.p.cram is created"
+	samtools view -T $v2 -C -o $param4.p.cram $fbname.p.bam
+	rm $fbname.p.bam
+	echo "$fbname.p.cram is created"
 elif [ $param2 == "SAM" ] || [ $param2 == "sam" ]
 then
-	samtools view -h $param4.p.bam > $param4.p.sam
-	rm $param4.p.bam
-        echo "$param4.p.sam is created"
+	samtools view -h $fbname.p.bam > $fbname.p.sam
+	rm $fbname.p.bam
+        echo "$fbname.p.sam is created"
 else
-	echo "$param4.p.bam is created"
+	echo "$fbname.p.bam is created"
 fi
 
 

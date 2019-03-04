@@ -8,8 +8,8 @@ workflow bam2pbam {
     String? operation
     String? cleanup_file
     String? output_format
-    String input_file
-    String ref_file
+    File input_file
+    File ref_file
 
 
     call bam2pbam_opt0 { input:
@@ -23,8 +23,8 @@ workflow bam2pbam {
         String? operation
         String? cleanup_file
         String? output_format
-        String input_file
-        String ref_file
+        File input_file
+        File ref_file
 
         command {
             bam2pbam.sh ${"-rl " + read_length} ${"-q " + operation} ${cleanup_file} ${"-ft " + output_format} -in ${input_file} -r ${ref_file}
