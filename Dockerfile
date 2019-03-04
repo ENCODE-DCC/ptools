@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     python3-dev \
+    python3-pip \
     gcc \
     make \
     git \
@@ -32,6 +33,9 @@ ENV PATH="/software/picard-tools-1.139:${PATH}"
 RUN git clone --branch 1.4 --single-branch https://github.com/samtools/samtools.git && \
     git clone --branch 1.4 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
+
+# Install python dependencies
+RUN pip3 install numpy biopython
 
 RUN mkdir -p ptools/src
 COPY /src/bam2pbam/* ptools/src/
