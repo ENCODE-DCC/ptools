@@ -179,7 +179,7 @@ $loc view $input | awk -F'\t' '{print $0; exit}' > $WORK_DIR/line.txt
 for i in `seq 1 $col`;
 do
         t=($(awk -v var="$i" '{print $var}' $WORK_DIR/line.txt | awk -F':' '{print $1}'))
-        if [ $t == 'AS' ]
+        if [[ $t == "AS" ]]
         then
                 ASprint=$i
         fi
@@ -190,7 +190,7 @@ MDprint=$(($col + 10));
 for i in `seq 1 $col`;
 do
         t=($(awk -v var="$i" '{print $var}' $WORK_DIR/line.txt | awk -F':' '{print $1}'))
-        if [ $t == 'MD' ]
+        if [[ $t == "MD" ]]
         then
                 MDprint=$i
         fi
@@ -201,7 +201,7 @@ NMprint=$(($col + 10));
 for i in `seq 1 $col`;
 do
         t=($(awk -v var="$i" '{print $var}' $WORK_DIR/line.txt | awk -F':' '{print $1}'))
-        if [ $t == 'NM' ] || [ $t == 'nM' ]
+        if [[ $t == "NM" ]] || [[ $t == "nM" ]]
         then
                 NMprint=$i
         fi
