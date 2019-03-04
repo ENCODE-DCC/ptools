@@ -164,7 +164,7 @@ fi
 
 if [ $param1 != "file" ]
 then
-	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python3 getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
+	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python3 /software/ptools/src/getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	samtools sort $WORK_DIR/Radio.bam -o $WORK_DIR/bothsorted.bam
 fi
 
@@ -210,11 +210,11 @@ done
 
 echo "Creating the diff file"
 #diff from the radio
-$loc view $WORK_DIR/bothsorted.bam | python3 createDiff.py > $WORK_DIR/temp.diff
+$loc view $WORK_DIR/bothsorted.bam | python3 /software/ptools/src/createDiff.py > $WORK_DIR/temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python3 compress.py $WORK_DIR/temp.diff $param4\.diff
+python3 /software/ptools/src/compress.py $WORK_DIR/temp.diff $param4\.diff
 
 #remove the temporary uncompressed file
 rm $WORK_DIR/temp.diff
