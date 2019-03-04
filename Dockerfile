@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y \
     default-jre \
     wget \
     unzip \
-    python3-dev \
-    python3-pip \
     gcc \
     make \
     git \
@@ -15,6 +13,12 @@ RUN apt-get update && apt-get install -y \
     libz-dev \
     libbz2-dev \
     libncurses5-dev 
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update && apt-get install -y \
+    python3.6 \
+    python3-pip
+RUN alias python3='python3.6'
 
 RUN mkdir /software
 WORKDIR /software
