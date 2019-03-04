@@ -52,7 +52,7 @@ format of the file Chr:loc-loc
 -r  reference file in .fasta format, mandatory
 -in name of the input file, mandatory
 -rl read length, default=learned from the file
-samtools, picard and python33 should be in the path"
+samtools, picard and python3 should be in the path"
 	;;
       *) echo "Option $1 not recognized" ;;
     esac
@@ -140,7 +140,7 @@ then
 	samtools index $param4
 	awk  '{ printf( "%s ", $1 ); } END { printf( "\n" ); }' $file > $WORK_DIR/tmp
 	samtools view -h $param4 $(awk -F[.] '{print $1}' $WORK_DIR/tmp) | samtools view -h -bS -  > $WORK_DIR/tmp.bam
-	samtools view $WORK_DIR/tmp.bam | python3 getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
+	samtools view $WORK_DIR/tmp.bam | python getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
 	awk '!seen[$0]++' $WORK_DIR/radio.txt | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	rm $WORK_DIR/radio.txt
 	rm $WORK_DIR/tmp.bam
@@ -164,7 +164,7 @@ fi
 
 if [ $param1 != "file" ]
 then
-	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python3 /software/ptools/src/getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
+	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python /software/ptools/src/getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	samtools sort $WORK_DIR/Radio.bam -o $WORK_DIR/bothsorted.bam
 fi
 
@@ -210,11 +210,11 @@ done
 
 echo "Creating the diff file"
 #diff from the radio
-$loc view $WORK_DIR/bothsorted.bam | python3 /software/ptools/src/createDiff.py > $WORK_DIR/temp.diff
+$loc view $WORK_DIR/bothsorted.bam | python /software/ptools/src/createDiff.py > $WORK_DIR/temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python3 /software/ptools/src/compress.py $WORK_DIR/temp.diff $param4\.diff
+python /software/ptools/src/compress.py $WORK_DIR/temp.diff $param4\.diff
 
 #remove the temporary uncompressed file
 rm $WORK_DIR/temp.diff

@@ -44,10 +44,8 @@ for lineB in fileB:
     pbam=p.split('\t')
     nColpbam=len(pbam)
     chrom=str(pbam[2])
-    print(chrom)
     startPos=int(pbam[3])
-    print(startPos)
-    pbam[9] = ref.query(chrom, startPos-1, int(RL))
+    pbam[9] = ref.query(chrom,startPos-1,int(RL))
     nbam=str(pbam[0])+'\t'
     for i in range(1,nColpbam-1):
             nbam=nbam+str(pbam[i])+'\t'
