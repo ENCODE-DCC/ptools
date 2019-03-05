@@ -12,6 +12,7 @@ param2="BAM"
 param3="n"
 param4="n"
 param5="n"
+output_prefix="PREFIX"
 
 while [ -n "$1" ]; do # while loop starts
     case "$1" in
@@ -43,6 +44,11 @@ while [ -n "$1" ]; do # while loop starts
     -rl)
         param5=$2 #read lenght
         echo "-rl option passed, with value $param5"
+        shift
+        ;;
+    -output_prefix)
+        output_prefix=$2 #this is a prefix for all the output files that get surfaced from cromwell
+        echo "all the outputs are going to have a prefix $output_prefix"
         shift
         ;;
     -h)
@@ -81,12 +87,12 @@ fi
 samtools view -H $param4 > header.txt
 
 #set reference file
-reffa=$param3
+reference_genome_file=$param3
 
 #set read lentgh and tags
-rL=$param5
-md=$rL
-as=$(($rL*2))
+read_length=$param5
+md=$read_length
+as=$(($read_length*2))
 
 #set operation
 if [[ $param1 == "n" ]] || [[ $param1 == "all" ]]
@@ -124,7 +130,7 @@ then
     samtools index $param4
     awk  '{ printf( "%s ", $1 ); } END { printf( "\n" ); }' $file > tmp
     samtools view -h $param4 $(awk -F[.] '{print $1}' tmp) | samtools view -h -bS -  > tmp.bam
-    samtools view tmp.bam | python getSeq.py $reffa header.txt $rL > radio.txt
+    samtools view tmp.bam | python getSeq.py $reference_genome_file header.txt $read_length > radio.txt
     awk '!seen[$0]++' radio.txt | samtools view -h -bS - > Radio.bam
     rm radio.txt
     rm tmp.bam
@@ -133,11 +139,11 @@ then
     len=($(wc -l < RadioReadList.txt))
     if [[ $len -gt "0" ]]
     then
-            java -jar picard.jar FilterSamReads I=$param4 O=nonRadio.bam READ_LIST_FILE=RadioReadList.txt FILTER=excludeReadList
-            rm RadioReadList.txt
+        java -jar picard.jar FilterSamReads I=$param4 O=nonRadio.bam READ_LIST_FILE=RadioReadList.txt FILTER=excludeReadList
+        rm RadioReadList.txt
         samtools merge both.bam nonRadio.bam Radio.bam
-                samtools sort both.bam -o bothsorted.bam
-                rm both.bam
+        samtools sort both.bam -o bothsorted.bam
+        rm both.bam
     else
         samtools view -h -b -S $param4 > nonRadio.bam
         samtools merge both.bam nonRadio.bam Radio.bam
@@ -148,7 +154,7 @@ fi
 
 if [[ $param1 != "file" ]]
 then
-    samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python /software/ptools/src/getSeq.py $reffa header.txt $rL | samtools view -h -bS - > Radio.bam
+    samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python /software/ptools/src/getSeq.py $reference_genome_file header.txt $read_length | samtools view -h -bS - > Radio.bam
     samtools sort Radio.bam -o bothsorted.bam
 fi
 
@@ -162,33 +168,33 @@ ASprint=$(($col + 10));
 $loc view $input | awk -F'\t' '{print $0; exit}' > line.txt
 for i in `seq 1 $col`;
 do
-        t=($(awk -v var="$i" '{print $var}' line.txt | awk -F':' '{print $1}'))
-        if [[ $t == "AS" ]]
-        then
-                ASprint=$i
-        fi
+    t=($(awk -v var="$i" '{print $var}' line.txt | awk -F':' '{print $1}'))
+    if [[ $t == "AS" ]]
+    then
+        ASprint=$i
+    fi
 done
 
 #find out if MD is printed
 MDprint=$(($col + 10));
 for i in `seq 1 $col`;
 do
-        t=($(awk -v var="$i" '{print $var}' line.txt | awk -F':' '{print $1}'))
-        if [[ $t == "MD" ]]
-        then
-                MDprint=$i
-        fi
+    t=($(awk -v var="$i" '{print $var}' line.txt | awk -F':' '{print $1}'))
+    if [[ $t == "MD" ]]
+    then
+        MDprint=$i
+    fi
 done
 
 #find out if NM is printed
 NMprint=$(($col + 10));
 for i in `seq 1 $col`;
 do
-        t=($(awk -v var="$i" '{print $var}' line.txt | awk -F':' '{print $1}'))
-        if [[ $t == "NM" ]] || [[ $t == "nM" ]]
-        then
-                NMprint=$i
-        fi
+    t=($(awk -v var="$i" '{print $var}' line.txt | awk -F':' '{print $1}'))
+    if [[ $t == "NM" ]] || [[ $t == "nM" ]]
+    then
+        NMprint=$i
+    fi
 done
 
 fbname=$(basename "$param4" | cut -d. -f1)
@@ -199,7 +205,7 @@ $loc view bothsorted.bam | python /software/ptools/src/createDiff.py > temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python /software/ptools/src/compress.py temp.diff $fbname.diff
+python /software/ptools/src/compress.py temp.diff $output_prefix.diff
 
 #remove the temporary uncompressed file
 rm temp.diff
@@ -211,7 +217,7 @@ $loc view -h $input | awk '$0 ~ /^@/ || $6 !~ /N/' | samtools view -bS - > nonin
 
 
 #create p-bam from nonintronic
-$loc view nonintronic.bam | awk -v var="$ASprint" -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ vv) {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}} else {$6="'"$rL"'M"; {for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > preads_nonintronic.txt
+$loc view nonintronic.bam | awk -v var="$ASprint" -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ vv) {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}} else {$6="'"$read_length"'M"; {for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > preads_nonintronic.txt
 
 #separate intronic reads
 $loc view intronic.bam | awk -v var="$ASprint"  -v var2="$ntabs" -v var3="$n" -v var4="$MDprint" -v var5="$NMprint" -v vv="$q" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";if ($6 !~ vv) {{for (i=1; i<=var3; i++) printf "%s\t", $i} {printf "%s\n", $i}}}' > intronic1.txt
@@ -221,7 +227,7 @@ $loc view intronic.bam | awk -v var="$q" '{if ($6 ~ "var") {print $0}}' > intron
 cat intronic2.txt | awk '{print $6}' | awk -F'[N]' '{print $1}' | awk -F'[MDSXIH]' '{print $NF}' > lengthOFintron.txt
 cat intronic2.txt | awk '{print $6}' | awk -F'[N]' '{print $1}' | awk -F'[N]' '{print $1}' | awk -F'[M]' '{print $1}' | awk -F'[SXIDH]' '{print $NF}' > lengthOFfirstM.txt
 paste lengthOFfirstM.txt lengthOFintron.txt > MN.txt
-awk -v rl="$rL" '{print $1"M"$2"N"rl-$1"M"}' MN.txt > MNM.txt
+awk -v rl="$read_length" '{print $1"M"$2"N"rl-$1"M"}' MN.txt > MNM.txt
 t=$(($ASprint+1))
 m=$(($MDprint+1))
 paste MNM.txt intronic2.txt | awk -v var="$t" -v var2=$ntabs -v var3="$n" -v var4="$m" -v var5="$NMprint" '{$var="AS:i:'"$as"'"; $var4="MD:Z:'"$md"'"; $var5="NM:i:0";{for (i=2; i<=6; i++) printf "%s\t", $i}; {printf $1"\t"}; {for (i=8; i<=var2; i++) printf "%s\t",$i} {printf "%s\n",$i}}' > intronicreads.txt
@@ -232,18 +238,18 @@ awk '{print $0}' all.txt | samtools view -h -bS - > tmp.p.bam
 if [ -f nonRadio.bam ]
 then
     samtools merge tmp2.p.bam tmp.p.bam nonRadio.bam
-    samtools sort tmp2.p.bam -o $fbname.p.bam
+    samtools sort tmp2.p.bam -o $output_prefix.p.bam
 fi 
 
 if [ ! -f nonRadio.bam ]
 then
-        samtools view -h -b -S tmp.p.bam > tmp2.p.bam 
-    samtools sort tmp2.p.bam -o $fbname.p.bam
+    samtools view -h -b -S tmp.p.bam > tmp2.p.bam 
+    samtools sort tmp2.p.bam -o $output_prefix.p.bam
 fi
 
 if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
 then
-    v2=$reffa
+    v2=$reference_genome_file
     echo "ref file is $v2"
     samtools view -T $v2 -C -o $param4.p.cram $fbname.p.bam
     rm $fbname.p.bam
@@ -252,7 +258,7 @@ elif [ $param2 == "SAM" ] || [ $param2 == "sam" ]
 then
     samtools view -h $fbname.p.bam > $fbname.p.sam
     rm $fbname.p.bam
-        echo "$fbname.p.sam is created"
+    echo "$fbname.p.sam is created"
 else
     echo "$fbname.p.bam is created"
 fi
