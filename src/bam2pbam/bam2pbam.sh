@@ -191,6 +191,7 @@ do
         fi
 done
 
+fbname=$(basename "$param4" | cut -d. -f1)
 
 echo "Creating the diff file"
 #diff from the radio
@@ -198,7 +199,7 @@ $loc view bothsorted.bam | python /software/ptools/src/createDiff.py > temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python /software/ptools/src/compress.py temp.diff $param4\.diff
+python /software/ptools/src/compress.py temp.diff $fbname.diff
 
 #remove the temporary uncompressed file
 rm temp.diff
@@ -227,12 +228,6 @@ paste MNM.txt intronic2.txt | awk -v var="$t" -v var2=$ntabs -v var3="$n" -v var
 
 cat header.txt intronic1.txt intronicreads.txt preads_nonintronic.txt > all.txt
 awk '{print $0}' all.txt | samtools view -h -bS - > tmp.p.bam
-
-
-fbname=$(basename "$param4" | cut -d. -f1)
-
-
-
 
 if [ -f nonRadio.bam ]
 then
