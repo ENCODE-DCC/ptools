@@ -3,17 +3,22 @@ FROM ubuntu:16.04
 MAINTAINER Otto Jolanki 
 
 RUN apt-get update && apt-get install -y \
+    software-properties-common \
     default-jre \
     wget \
     unzip \
-    python3-dev \
     gcc \
     make \
     git \
     # Samtools deps
     libz-dev \
     libbz2-dev \
-    libncurses5-dev 
+    libncurses5-dev \
+    python-pip
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update && apt-get install -y \
+    python2.7
 
 RUN mkdir /software
 WORKDIR /software
@@ -32,6 +37,9 @@ ENV PATH="/software/picard-tools-1.139:${PATH}"
 RUN git clone --branch 1.4 --single-branch https://github.com/samtools/samtools.git && \
     git clone --branch 1.4 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
+
+# Install python dependencies
+RUN python -m pip install numpy biopython
 
 RUN mkdir -p ptools/src
 COPY /src/bam2pbam/* ptools/src/

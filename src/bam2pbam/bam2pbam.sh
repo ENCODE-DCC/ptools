@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #### Gamze Gursoy 2018#####
 
@@ -105,24 +105,24 @@ md=$rL
 as=$(($rL*2))
 
 #set operation
-if [ $param1 == "n" ] || [ $param1 == "all" ]
+if [[ $param1 == "n" ]] || [[ $param1 == "all" ]]
 then
 	q='S|H|I|D|X'
 	echo $q
 fi
-if [ $param1 == "mis" ]
+if [[ $param1 == "mis" ]]
 then
 	q='X'
 fi
-if [ $param1 == "indel" ]
+if [[ $param1 == "indel" ]]
 then
 	q='I|D'
 fi
-if [ $param1 == "split" ]
+if [[ $param1 == "split" ]]
 then
 	q='S|H'
 fi
-if [ $param1 == "file" ]
+if [[ $param1 == "file" ]]
 then
 	file=$param12
 	q='S|H|I|D|X'
@@ -134,7 +134,7 @@ n=$(($ntabs-1))
 
 echo "generating radioactive and nonradioactive part of the bam file"
 
-if [ $param1 == "file" ]
+if [[ $param1 == "file" ]]
 then
 	#module load Python
 	samtools index $param4
@@ -147,7 +147,7 @@ then
 	rm $WORK_DIR/tmp
 	samtools view $WORK_DIR/Radio.bam | awk '{print $1}' > $WORK_DIR/RadioReadList.txt
 	len=($(wc -l < $WORK_DIR/RadioReadList.txt))
-	if [ $len -gt 0 ]
+	if [[ $len -gt "0" ]]
 	then
         	java -jar picard.jar FilterSamReads I=$param4 O=$WORK_DIR/nonRadio.bam READ_LIST_FILE=$WORK_DIR/RadioReadList.txt FILTER=excludeReadList
         	rm $WORK_DIR/RadioReadList.txt
@@ -162,9 +162,9 @@ then
 	fi
 fi
 
-if [ $param1 != "file" ]
+if [[ $param1 != "file" ]]
 then
-	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
+	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python /software/ptools/src/getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	samtools sort $WORK_DIR/Radio.bam -o $WORK_DIR/bothsorted.bam
 fi
 
@@ -179,7 +179,7 @@ $loc view $input | awk -F'\t' '{print $0; exit}' > $WORK_DIR/line.txt
 for i in `seq 1 $col`;
 do
         t=($(awk -v var="$i" '{print $var}' $WORK_DIR/line.txt | awk -F':' '{print $1}'))
-        if [ $t == 'AS' ]
+        if [[ $t == "AS" ]]
         then
                 ASprint=$i
         fi
@@ -190,7 +190,7 @@ MDprint=$(($col + 10));
 for i in `seq 1 $col`;
 do
         t=($(awk -v var="$i" '{print $var}' $WORK_DIR/line.txt | awk -F':' '{print $1}'))
-        if [ $t == 'MD' ]
+        if [[ $t == "MD" ]]
         then
                 MDprint=$i
         fi
@@ -201,7 +201,7 @@ NMprint=$(($col + 10));
 for i in `seq 1 $col`;
 do
         t=($(awk -v var="$i" '{print $var}' $WORK_DIR/line.txt | awk -F':' '{print $1}'))
-        if [ $t == 'NM' ] || [ $t == 'nM' ]
+        if [[ $t == "NM" ]] || [[ $t == "nM" ]]
         then
                 NMprint=$i
         fi
@@ -210,11 +210,11 @@ done
 
 echo "Creating the diff file"
 #diff from the radio
-$loc view $WORK_DIR/bothsorted.bam | python createDiff.py > $WORK_DIR/temp.diff
+$loc view $WORK_DIR/bothsorted.bam | python /software/ptools/src/createDiff.py > $WORK_DIR/temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python compress.py $WORK_DIR/temp.diff $param4\.diff
+python /software/ptools/src/compress.py $WORK_DIR/temp.diff $param4\.diff
 
 #remove the temporary uncompressed file
 rm $WORK_DIR/temp.diff
@@ -244,33 +244,39 @@ paste $WORK_DIR/MNM.txt $WORK_DIR/intronic2.txt | awk -v var="$t" -v var2=$ntabs
 cat $WORK_DIR/header.txt $WORK_DIR/intronic1.txt $WORK_DIR/intronicreads.txt $WORK_DIR/preads_nonintronic.txt > $WORK_DIR/all.txt
 awk '{print $0}' $WORK_DIR/all.txt | samtools view -h -bS - > $WORK_DIR/tmp.p.bam
 
+
+fbname=$(basename "$param4" | cut -d. -f1)
+
+
+
+
 if [ -f $WORK_DIR/nonRadio.bam ]
 then
 	samtools merge $WORK_DIR/tmp2.p.bam $WORK_DIR/tmp.p.bam nonRadio.bam
-	samtools sort $WORK_DIR/tmp2.p.bam -o $param4.p.bam
+	samtools sort $WORK_DIR/tmp2.p.bam -o $fbname.p.bam
 fi 
 
 if [ ! -f $WORK_DIR/nonRadio.bam ]
 then
         samtools view -h -b -S $WORK_DIR/tmp.p.bam > $WORK_DIR/tmp2.p.bam 
-	samtools sort $WORK_DIR/tmp2.p.bam -o $param4.p.bam
+	samtools sort $WORK_DIR/tmp2.p.bam -o $fbname.p.bam
 fi
 
 if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
 then
 	v2=$reffa
 	echo "ref file is $v2"
-	samtools view -T $v2 -C -o $param4.p.cram $param4.p.bam
-	rm $param4.p.bam
-	echo "$param4.p.cram is created"
+	samtools view -T $v2 -C -o $param4.p.cram $fbname.p.bam
+	rm $fbname.p.bam
+	echo "$fbname.p.cram is created"
 elif [ $param2 == "SAM" ] || [ $param2 == "sam" ]
 then
-	samtools view -h $param4.p.bam > $param4.p.sam
-	rm $param4.p.bam
-        echo "$param4.p.sam is created"
+	samtools view -h $fbname.p.bam > $fbname.p.sam
+	rm $fbname.p.bam
+        echo "$fbname.p.sam is created"
 else
-	echo "$param4.p.bam is created"
+	echo "$fbname.p.bam is created"
 fi
 
 
-rm -rf $WORK_DIR
+#rm -rf $WORK_DIR
