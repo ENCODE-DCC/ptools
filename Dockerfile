@@ -14,11 +14,11 @@ RUN apt-get update && apt-get install -y \
     libz-dev \
     libbz2-dev \
     libncurses5-dev \
-    python3-pip 
+    python-pip
 
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install -y \
-    python3.6 
+    python2.7
 
 RUN mkdir /software
 WORKDIR /software
@@ -39,7 +39,7 @@ RUN git clone --branch 1.4 --single-branch https://github.com/samtools/samtools.
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install python dependencies
-RUN python3.6 -m pip install numpy biopython
+RUN python -m pip install numpy biopython
 
 RUN mkdir -p ptools/src
 COPY /src/bam2pbam/* ptools/src/

@@ -52,7 +52,7 @@ format of the file Chr:loc-loc
 -r  reference file in .fasta format, mandatory
 -in name of the input file, mandatory
 -rl read length, default=learned from the file
-samtools, picard and python3.63 should be in the path"
+samtools, picard and python3 should be in the path"
 	;;
       *) echo "Option $1 not recognized" ;;
     esac
@@ -105,24 +105,24 @@ md=$rL
 as=$(($rL*2))
 
 #set operation
-if [ $param1 == "n" ] || [ $param1 == "all" ]
+if [[ $param1 == "n" ]] || [[ $param1 == "all" ]]
 then
 	q='S|H|I|D|X'
 	echo $q
 fi
-if [ $param1 == "mis" ]
+if [[ $param1 == "mis" ]]
 then
 	q='X'
 fi
-if [ $param1 == "indel" ]
+if [[ $param1 == "indel" ]]
 then
 	q='I|D'
 fi
-if [ $param1 == "split" ]
+if [[ $param1 == "split" ]]
 then
 	q='S|H'
 fi
-if [ $param1 == "file" ]
+if [[ $param1 == "file" ]]
 then
 	file=$param12
 	q='S|H|I|D|X'
@@ -134,20 +134,20 @@ n=$(($ntabs-1))
 
 echo "generating radioactive and nonradioactive part of the bam file"
 
-if [ $param1 == "file" ]
+if [[ $param1 == "file" ]]
 then
 	#module load Python
 	samtools index $param4
 	awk  '{ printf( "%s ", $1 ); } END { printf( "\n" ); }' $file > $WORK_DIR/tmp
 	samtools view -h $param4 $(awk -F[.] '{print $1}' $WORK_DIR/tmp) | samtools view -h -bS -  > $WORK_DIR/tmp.bam
-	samtools view $WORK_DIR/tmp.bam | python3.6 getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
+	samtools view $WORK_DIR/tmp.bam | python getSeq.py $reffa $WORK_DIR/header.txt $rL > $WORK_DIR/radio.txt
 	awk '!seen[$0]++' $WORK_DIR/radio.txt | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	rm $WORK_DIR/radio.txt
 	rm $WORK_DIR/tmp.bam
 	rm $WORK_DIR/tmp
 	samtools view $WORK_DIR/Radio.bam | awk '{print $1}' > $WORK_DIR/RadioReadList.txt
 	len=($(wc -l < $WORK_DIR/RadioReadList.txt))
-	if [ $len -gt 0 ]
+	if [[ $len -gt "0" ]]
 	then
         	java -jar picard.jar FilterSamReads I=$param4 O=$WORK_DIR/nonRadio.bam READ_LIST_FILE=$WORK_DIR/RadioReadList.txt FILTER=excludeReadList
         	rm $WORK_DIR/RadioReadList.txt
@@ -162,9 +162,9 @@ then
 	fi
 fi
 
-if [ $param1 != "file" ]
+if [[ $param1 != "file" ]]
 then
-	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python3.6 /software/ptools/src/getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
+	samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python /software/ptools/src/getSeq.py $reffa $WORK_DIR/header.txt $rL | samtools view -h -bS - > $WORK_DIR/Radio.bam
 	samtools sort $WORK_DIR/Radio.bam -o $WORK_DIR/bothsorted.bam
 fi
 
@@ -210,11 +210,11 @@ done
 
 echo "Creating the diff file"
 #diff from the radio
-$loc view $WORK_DIR/bothsorted.bam | python3.6 /software/ptools/src/createDiff.py > $WORK_DIR/temp.diff
+$loc view $WORK_DIR/bothsorted.bam | python /software/ptools/src/createDiff.py > $WORK_DIR/temp.diff
 
 #compress the .diff file
 echo "Compressing the diff file"
-python3.6 /software/ptools/src/compress.py $WORK_DIR/temp.diff $param4\.diff
+python /software/ptools/src/compress.py $WORK_DIR/temp.diff $param4\.diff
 
 #remove the temporary uncompressed file
 rm $WORK_DIR/temp.diff
@@ -279,4 +279,4 @@ else
 fi
 
 
-rm -rf $WORK_DIR
+#rm -rf $WORK_DIR
