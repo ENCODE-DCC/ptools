@@ -8,7 +8,7 @@
 
 #set defaults"
 param1="all"
-param2="BAM"
+param2="bam"
 param3="n"
 param4="n"
 param5="n"
@@ -54,7 +54,7 @@ while [ -n "$1" ]; do # while loop starts
     -h)
         echo "-q for operation <file/mis/indel/split/all>, default=all, if file then followed by the file name
 format of the file Chr:loc-loc
--ft for output file type <BAM/SAM/CRAM>, default=BAM
+-ft for output file type <bam/sam/cram>, default=bam
 -r  reference file in .fasta format, mandatory
 -in name of the input file, mandatory
 -rl read length, default=learned from the file
@@ -197,8 +197,6 @@ do
     fi
 done
 
-fbname=$(basename "$param4" | cut -d. -f1)
-
 echo "Creating the diff file"
 #diff from the radio
 $loc view bothsorted.bam | python /software/ptools/src/createDiff.py > temp.diff
@@ -247,17 +245,17 @@ then
     samtools sort tmp2.p.bam -o $output_prefix.p.bam
 fi
 
-if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
+if [ $param2 == "cram" ]
 then
     echo "ref file is $reference_genome_file"
-    samtools view -T $reference_genome_file -C -o $param4.p.cram $fbname.p.bam
-    rm $fbname.p.bam
-    echo "$fbname.p.cram is created"
-elif [ $param2 == "SAM" ] || [ $param2 == "sam" ]
+    samtools view -T $reference_genome_file -C -o $output_prefix.p.cram $output_prefix.p.bam
+    rm $output_prefix.p.bam
+    echo "$output_prefix.p.cram is created"
+elif [ $param2 == "sam" ]
 then
-    samtools view -h $fbname.p.bam > $fbname.p.sam
-    rm $fbname.p.bam
-    echo "$fbname.p.sam is created"
+    samtools view -h $output_prefix.p.bam > $output_prefix.p.sam
+    rm $output_prefix.p.bam
+    echo "$output_prefix.p.sam is created"
 else
-    echo "$fbname.p.bam is created"
+    echo "$output_prefix.p.bam is created"
 fi
