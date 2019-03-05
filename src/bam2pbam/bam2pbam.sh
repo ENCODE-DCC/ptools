@@ -249,9 +249,8 @@ fi
 
 if [ $param2 == "CRAM" ] || [ $param2 == "cram" ]
 then
-    v2=$reference_genome_file
-    echo "ref file is $v2"
-    samtools view -T $v2 -C -o $param4.p.cram $fbname.p.bam
+    echo "ref file is $reference_genome_file"
+    samtools view -T $reference_genome_file -C -o $param4.p.cram $fbname.p.bam
     rm $fbname.p.bam
     echo "$fbname.p.cram is created"
 elif [ $param2 == "SAM" ] || [ $param2 == "sam" ]

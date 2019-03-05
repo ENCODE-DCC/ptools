@@ -8,6 +8,7 @@ workflow bam2pbam {
     String? operation
     String? cleanup_file
     String? output_format
+    String output_prefix
     File input_file
     File ref_file
 
@@ -15,6 +16,7 @@ workflow bam2pbam {
     call bam2pbam_opt0 { input:
         input_file = input_file,
         ref_file = ref_file,
+        output_prefix = output_prefix
     }
 }
 
@@ -25,8 +27,16 @@ workflow bam2pbam {
         String? output_format
         File input_file
         File ref_file
+        String output_prefix
 
         command {
-            bam2pbam.sh ${"-rl " + read_length} ${"-q " + operation} ${cleanup_file} ${"-ft " + output_format} -in ${input_file} -r ${ref_file}
+            bam2pbam.sh ${"-rl " + read_length} \
+                        ${"-q " + operation} \
+                        ${cleanup_file} \
+                        ${"-ft " + output_format} \
+                        -in ${input_file} \
+                        -r ${ref_file} \
+                        -output_prefix ${output_prefix}
         }
+        
     }
