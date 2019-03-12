@@ -1,6 +1,7 @@
 {
-	"bam2pbam.input_file" : "test_data/test.sorted.bam",
-	"bam2pbam.ref_file" : "test_data/human_g1k_v37.fasta"
+    "bam2pbam.input_file" : "test_data/test.sorted.bam",
+    "bam2pbam.ref_file" : "test_data/human_g1k_v37.fasta",
+    "bam2pbam.output_prefix" : "TESTING"
 }
 
 

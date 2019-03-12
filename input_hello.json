@@ -1,6 +1,0 @@
-{
-    "hello_wf.message" : "Hi!",
-    "hello_wf.ncpus_greeting" : 1,
-    "hello_wf.ramGB_greeting" : 1,
-    "hello_wf.disks_greeting" : "local-disk 10 HDD"
-}
