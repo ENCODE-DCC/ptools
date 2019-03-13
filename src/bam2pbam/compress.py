@@ -7,20 +7,17 @@ Decompression of compressed file to original file (in: Mycompdata.txt, out: Myde
 
 '''
 
-import zlib,sys,time,base64
+import sys
+import gzip
+import shutil
+import os
 
-#Compression of raw file
+# Compression of raw file
 rawfile = sys.argv[1]
 outfile = sys.argv[2]
-fp = open(rawfile,"rb")
-text = fp.read()
+with open(rawfile, 'rb') as file_in:
+    with gzip.open(outfile, 'wb') as file_out:
+        shutil.copyfileobj(file_in, file_out)
 
-print ('Raw size:', sys.getsizeof(text))
-
-compressed = zlib.compress(text,9)
-print('compressed size:',sys.getsizeof(compressed))
-
-savecomp = open(outfile, 'wb')
-savecomp.write(compressed)
-savecomp.close()
-
+print('Raw size:', os.path.getsize(rawfile))
+print('compressed size:', os.path.getsize(outfile))
