@@ -11,13 +11,18 @@ workflow bam2pbam {
     String output_prefix
     File input_file
     File ref_file
-
+    Int ncpus
+    Int ramGB
+    String disk
 
     call bam2pbam_opt0 { input:
         input_file = input_file,
         ref_file = ref_file,
         output_prefix = output_prefix,
         output_format = output_format,
+        ncpus = ncpus,
+        ramGB = ramGB,
+        disk = disk,
     }
 }
 
@@ -29,6 +34,9 @@ workflow bam2pbam {
         File input_file
         File ref_file
         String output_prefix
+        Int ncpus
+        Int ramGB
+        String disk
 
         command {
             bam2pbam.sh ${"-rl " + read_length} \
@@ -43,5 +51,11 @@ workflow bam2pbam {
         output {
             File diff = glob("*.diff")[0]
             File p_file = glob(output_prefix+".p."+output_format)[0]
+        }
+
+        runtime {
+            cpu: ncpus
+            memory: "${ramGB} GB"
+            disks: disk
         }
     }

@@ -154,7 +154,7 @@ fi
 
 if [[ $param1 != "file" ]]
 then
-    samtools view $param4 | awk '{if (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y") print $0}' | python /software/ptools/src/getSeq.py $reference_genome_file header.txt $read_length | samtools view -h -bS - > Radio.bam
+    samtools view $param4 | awk '{if (($3~/chr/) || (($3 >= 1 && $3 <= 22) || $3=="X" || $3=="Y")) print $0}' | python /software/ptools/src/getSeq.py $reference_genome_file header.txt $read_length | samtools view -h -bS - > Radio.bam
     samtools sort Radio.bam -o bothsorted.bam
 fi
 
