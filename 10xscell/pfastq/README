@@ -1,0 +1,4 @@
+Usage: sh makeFastq.sh <pbam>
+
+input: <pbam> -> name of the pbam file before the ".p.bam" pbam extension
+output: pbam_R1.fastq.gz, pbam_R2.fastq.gz, pbam_I1.fastq.gz 
