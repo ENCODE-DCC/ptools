@@ -1,0 +1,9 @@
+Usage: sh makepBAM.sh <bam> <gref> <tref> <gtf>
+
+input: <bam>, name of the bam file before the extension
+<gref>, reference genome (path included)
+<tref>, reference transcriptome (path included)
+<gtf>, gtf file (path included)
+
+output: <bam>.p.bam, a p.bam file with the same name as the <bam> file before the .bam extension
+

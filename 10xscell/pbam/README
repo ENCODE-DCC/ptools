@@ -1,0 +1,6 @@
+Usage: sh makepBAM.sh <bam> <ref>
+
+input: <bam>, name of the bam file before the ".bam" extension (do not include the path and always run it in the directory that the bam file is in)
+<ref>, reference genome with the path
+
+output: <bam>.p.bam, a p.bam file that has the same name as the bam before the extension.

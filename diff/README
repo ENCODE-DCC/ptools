@@ -1,0 +1,5 @@
+usage: sh makeDiff.sh <bam>
+
+input: <bam>, name of the bam file before the bam extension
+
+output: <bam>.diff diff file of the corresponding bam file
