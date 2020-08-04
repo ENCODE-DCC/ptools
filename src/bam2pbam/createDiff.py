@@ -3,7 +3,8 @@ import os
 import string
 import re
 import csv
-'''
+
+"""
 README:
 
 Name: Final_Bam_2_pBAM_and_Diff.py
@@ -30,29 +31,29 @@ Program has ______ parts, each is described in detail below:
         cigmod - 
 
 3) MakepBAM.py
-'''
+"""
 
-#Try.py
+# Try.py
 
 
 def MakeDiff(BAM):
-    readarray = BAM.split('\t')
+    readarray = BAM.split("\t")
     readID = readarray[0]
     seq = readarray[9]
-    Qualseq = '*'
+    Qualseq = "*"
     cigar = readarray[5]
     AS = []
     MD = []
     MDcolumn = -1
     AScolumn = -1
     for i in range(0, len(readarray)):
-        chars = set('SHIDX')
-        if 'AS:' in readarray[i] and i > 10:
+        chars = set("SHIDX")
+        if "AS:" in readarray[i] and i > 10:
             AScolumn = i
             break
     for i in range(0, len(readarray)):
-        chars = set('SHIDX')
-        if 'MD:Z:' in readarray[i] and i > 10:
+        chars = set("SHIDX")
+        if "MD:Z:" in readarray[i] and i > 10:
             MDcolumn = i
             break
     if AScolumn == -1 and MDcolumn == -1:
@@ -97,40 +98,39 @@ def cigparse(cigar):
     l1 = []
     num1 = ""
     for c1 in cigar:
-        if c1 in '0123456789':
+        if c1 in "0123456789":
             num1 = num1 + c1
         else:
             l1.append([int(num1), c1])
             num1 = ""
-    return (
-        l1)  #Remember to change 'print' back to 'return' after sanity check
+    return l1  # Remember to change 'print' back to 'return' after sanity check
 
 
 def getfseq(cigar, seq):
     a = cigparse(cigar)
     #   print(a)
-    #b is the sequence
+    # b is the sequence
     b = seq
     start = 0
-    m = ''
-    #print(len(a))
+    m = ""
+    # print(len(a))
     for i in range(0, len(a)):
-        if a[i][1] in 'M':
+        if a[i][1] in "M":
             start = start + a[i][0]
-            k = ''
-        if a[i][1] in 'N':
+            k = ""
+        if a[i][1] in "N":
             start = start
-            k = ''
-        if a[i][1] in 'SIX':
-            tup = b[start:start + a[i][0]]
+            k = ""
+        if a[i][1] in "SIX":
+            tup = b[start : start + a[i][0]]
             #   print(tup)
-            k = tup + ':' + str(a[i][1]) + '-'
+            k = tup + ":" + str(a[i][1]) + "-"
             start = start + a[i][0]
         m = m + k
 
+    #       print(m)
+    return m[0 : len(m) - 1]
 
-#       print(m)
-    return (m[0:len(m) - 1])
 
 for line in sys.stdin:
     MakeDiff(line)

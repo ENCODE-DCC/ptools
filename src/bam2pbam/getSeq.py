@@ -17,8 +17,8 @@ import gzip
 import numpy as np
 import PrintSequence
 
-#following is necessary for querying sequences from reference genome
-with open(sys.argv[1], 'rb') as f:
+# following is necessary for querying sequences from reference genome
+with open(sys.argv[1], "rb") as f:
     ref = PrintSequence.Lookup(f)
 
 bam = []
@@ -27,7 +27,7 @@ import io
 hed = open(sys.argv[2], "r")
 header = []
 for line in hed:
-    header.append(line.split('\n')[0])
+    header.append(line.split("\n")[0])
 hed.close()
 
 for i in range(0, len(header)):
@@ -37,19 +37,19 @@ fileB = sys.stdin
 RL = sys.argv[3]
 for lineB in fileB:
     p = lineB.rstrip()
-    pbam = p.split('\t')
+    pbam = p.split("\t")
     nColpbam = len(pbam)
     chrom = str(pbam[2])
     startPos = int(pbam[3])
     pbam[9] = ref.query(chrom, startPos - 1, int(RL))
     if len(pbam[9]) < int(RL):
-            a = int(RL) - len(pbam[9])
-            for i in range(0, a):
-            	pbam[9] = pbam[9] + "N"
-    nbam = str(pbam[0]) + '\t'
+        a = int(RL) - len(pbam[9])
+        for i in range(0, a):
+            pbam[9] = pbam[9] + "N"
+    nbam = str(pbam[0]) + "\t"
     for i in range(1, nColpbam - 1):
-        nbam = nbam + str(pbam[i]) + '\t'
+        nbam = nbam + str(pbam[i]) + "\t"
     nbam = nbam + str(pbam[nColpbam - 1])
     print(nbam)
-    nbam = ''
+    nbam = ""
     bam = []
