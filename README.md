@@ -10,6 +10,7 @@ This folder contains the code that converts a 10x single cell RNA-Seq BAM file i
 * getSeq_woN.py
 * makepBAM.sh
 * README
+
 Usage:
 ```
 sh makepBAM.sh <bam> <ref>
@@ -24,6 +25,7 @@ This folder contains the code that converts a functional genomics BAM file into 
 * getSeq_woN.py
 * makepBAM.sh
 * README
+
 Usage:
 ```
 sh makepBAM.sh <bam> <ref>
