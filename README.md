@@ -1,49 +1,33 @@
-# bam2pbam
-Pipeline to convert bams into pbams
-
-* requires (1) python 3
-         (2) samtools
-         (3) picard tools
-         (4) compress.py
-         (5) PrintSequence.py
-         (6) createDiff.py
- 
-* type "sh bam2pbam.sh -h" to see the options, i.e
-
-  -q for operation <file/mis/indel/split/all>, default=all, if file then followed by the file name 
-
-  format of the file Chr:loc-loc 
-
-  -ft for output file type <BAM/SAM/CRAM>, default=BAM 
-
-  -r  reference file in .fasta format, mandatory 
-
-  -in name of the input file, mandatory 
-
-  -rl read length, default=learned from the file 
-
-  samtools, picard and python3 should be in the path 
-  
-# pbam2bam
-Pipeline to convert pbams into bams
-
-* requires (1) python 3
-         (2) samtools
-         (3) PrintSequence.py
-
- 
-* type "sh pbam2bam.sh -h" to see the options, i.e
-
-  -ft for output file type <BAM/SAM/CRAM>, default=BAM 
-
-  -r  reference file in .fasta format, mandatory 
-
-  -in name of the input pbam file, mandatory 
-
-  -rl read length, default=learned from the file 
-  
-  -p path to the .diff file, default is the current directory
-  
-  -d name of the diff file with the extension
-
-  samtools and python3 should be in the path 
+# pTools
+Dependencies are samtools and python 3
+## BAM to pBAM conversion
+This is a combination of scripts that converts BAM files into a pBAM format.
+The list of corresponding folders are: (1) 10xscell/pbam/, (2) genome, (3) transcriptome
+### 10xscell/pbam
+This folder contains the code that converts a 10x single cell RNA-Seq BAM file into a pBAM format. The BAM file must be created by mapping the reads to the reference genome and keeping the unaligned reads in the BAM file. This folder contains the following scripts:
+* PrintSequence.py
+* getSeq_wN.py
+* getSeq_woN.py
+* makepBAM.sh
+* README
+Usage:
+```
+sh makepBAM.sh <bam> <ref>
+```
+* bam : input BAM file. Name of the bam file before the ".bam" extension.
+* ref : input reference genome.  This should be the same reference genome that was used to generate the BAM file. Please use the full path.
+* This script will generate an output "<bam>.p.bam", a pBAM file that has the same name as the input BAM file
+### genome
+This folder contains the code that converts a functional genomics BAM file into a pBAM format. This is specifically for BAM files that are created by mapping the reads to reference genome. This is the code to use for ChIP-Seq, ATAC-Seq and genome aligned RNA-Seq BAM files. This folder contains the following scripts:
+* PrintSequence.py
+* getSeq_wN.py
+* getSeq_woN.py
+* makepBAM.sh
+* README
+Usage:
+```
+sh makepBAM.sh <bam> <ref>
+```
+* bam : input BAM file. Name of the bam file before the ".bam" extension.
+* ref : input reference genome.  This should be the same reference genome that was used to generate the BAM file. Please use the full path.
+* This script will generate an output "<bam>.p.bam", a pBAM file that has the same name as the input BAM file
