@@ -70,3 +70,49 @@ This folder contains the code that converts a 10x single cell RNA-seq pBAM file 
 * make_unique.py
 * print_unique.py
 * README
+
+Usage:
+```
+sh makeFastq.sh <pbam>
+```
+* pbam : input pBAM file. Name of the p.bam file before the "p.bam" extension.
+* This script will generate three output files that are named
+  * pbam_R1.fastq.gz, 
+  * pbam_R2.fastq.gz, 
+  * pbam_I1.fastq.gz
+  
+## BAM to .diff conversion
+
+This is a combination of scripts that converts BAM files into a .diff format. For this, we will use the folder "diff". This folder contains the following scripts:
+* createDiff.py
+* makeDiff.sh
+* compress.py
+* README
+
+Usage:
+```
+sh makeDiff.sh <bam>
+```
+* bam : input BAM file. Name of the bam file before the ".bam" extension.
+* This script will generate an output "<bam>.diff", a diff file that has the same name as the input BAM file
+  
+## pBAM + .diff to BAM conversion
+
+This is a combination of scripts that converts pBAM and .diff files into BAM format. For this, we will use the folder "pbam2bam". This folder contains the following scripts:
+* PrintSequence.py
+* PrintTransSequence.py
+* pbam2bam.py
+* makeBAM.sh
+* README
+
+Usage:
+```
+sh makeBAM.sh <pbam> <ref> <tmp> <prompt>
+```
+* pbam : input pBAM file. Name of the p.bam file before the "p.bam" extension.
+* ref : input reference genome.  This should be the same reference genome that is in the header of the pBAM file. Please use the full path.
+* tmp : a temporary folder name, will be deleted at the end of the run.
+* prompt : use "genome" for genome aligned pBAMs and "transcriptome" for transcriptome aligned pBAMs
+* This script will generate an output "<pbam>.bam", a BAM file that has the same name as the input and diff BAM file
+* MAKE SURE THE .diff AND THE .p.bam FILE HAS THE SAME EXACT NAME and are in the same folder
+
