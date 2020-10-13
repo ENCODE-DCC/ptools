@@ -17,27 +17,27 @@ import gzip
 import numpy as np
 import PrintSequence
 
-# following is necessary for querying sequences from reference genome
-with open(sys.argv[1], "rb") as f:
+#following is necessary for querying sequences from reference genome
+with open(sys.argv[1], 'rt') as f:
     ref = PrintSequence.Lookup(f)
 
 bam = []
 import io
 
-# hed = open(sys.argv[2], "r")
-# header = []
-# for line in hed:
+#hed = open(sys.argv[2], "r")
+#header = []
+#for line in hed:
 #    header.append(line.split('\n')[0])
-# hed.close()
+#hed.close()
 
-# for i in range(0, len(header)):
+#for i in range(0, len(header)):
 #    print("%s" % header[i])
 
-A = ref.query(str(sys.argv[2]), int(sys.argv[3]) - 1, int(sys.argv[4]))
+A=ref.query(str(sys.argv[2]), int(sys.argv[3]) - 1, int(sys.argv[4]))
 print(A)
-# fileB = sys.stdin
-# RL=len(pbam[9])
-# for lineB in fileB:
+#fileB = sys.stdin
+#RL=len(pbam[9])
+#for lineB in fileB:
 #    p = lineB.rstrip()
 #    pbam = p.split('\t')
 #    nColpbam = len(pbam)
