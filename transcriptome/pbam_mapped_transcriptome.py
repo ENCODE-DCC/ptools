@@ -16,11 +16,11 @@ import PrintTransSequence
 import PrintSequence
 #following is necessary for querying sequences from reference genome
 #ref transcriptome
-with open(sys.argv[1], 'rb') as f1:
+with open(sys.argv[1], 'rt') as f1:
     ref = PrintTransSequence.Lookup(f1)
 
 #ref genome
-with open(sys.argv[2], 'rb') as f2:
+with open(sys.argv[2], 'rt') as f2:
         ref2 = PrintSequence.Lookup(f2)
 
 bam = []

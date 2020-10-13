@@ -13,10 +13,10 @@ import PrintTransSequence
 
 #following is necessary for querying sequences from reference genome
 if sys.argv[1]=="genome":
-	with open(sys.argv[2], 'rb') as f:
+	with open(sys.argv[2], 'rt') as f:
         	ref=PrintSequence.Lookup(f)
 if sys.argv[1]=="transcriptome":
-        with open(sys.argv[2], 'rb') as f:
+        with open(sys.argv[2], 'rt') as f:
                 ref=PrintTransSequence.Lookup(f)
 
 

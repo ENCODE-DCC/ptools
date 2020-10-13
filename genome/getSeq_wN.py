@@ -33,7 +33,7 @@ def ParseCigar(cigar):
 
 
 #following is necessary for querying sequences from reference genome
-with open(sys.argv[1], 'rb') as f:
+with open(sys.argv[1], 'rt') as f:
     ref = PrintSequence.Lookup(f)
 
 bam = []

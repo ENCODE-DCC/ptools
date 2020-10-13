@@ -3,3 +3,5 @@ usage: sh makeDiff.sh <bam>
 input: <bam>, name of the bam file before the bam extension
 
 output: <bam>.diff diff file of the corresponding bam file
+
+make sure that the bam file is in the same folder as the makeDiff.sh script and do not input the path of the file. It will create the diff file in the same folder.

@@ -1,15 +1,7 @@
 #!/bin/sh
 
-#SBATCH -p general
-#SBATCH -J pBAM
-#SBATCH -n 1 --mem 10000 -t 144:00:00 
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=email
-
-
 bam=$1
 ref=$2
-#../../code/10x/GRCh38.p10.genome.fa
 
 
 module load Python

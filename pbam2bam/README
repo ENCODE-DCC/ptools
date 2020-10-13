@@ -1,8 +1,11 @@
-Usage: sh makeBAM <pbam> <ref> <tmp> <prompt>
+Usage: sh makeBAM.sh <pbam> <ref> <tmp> <prompt>
 
-input: <pbam>, name of the pbam file before the exttension; make sure the diff file has the same name and is in the same folder
+input: <pbam>, name of the pbam file before the extension; make sure the diff file has the same name and is in the same folder
 <ref>: reference genome or transcriptome with path 
 <tmp>: name of the tmp folder (will be automatically deleted)
 <prompt>: options: genome is for genome aligned pbams, transcriptome is for transcriptome alined pbams
 
-output: <bam>, a bam file that has the same name as pbam and diff (with a bam extension) 
+output: <bam>, a bam file that has the same name as pbam and diff (with a bam extension)
+
+MAKE SURE THE .diff AND THE .p.bam FILE HAS THE SAME EXACT NAME
+example: na12878rnaseq.p.bam and na12878rnaseq.diff 
