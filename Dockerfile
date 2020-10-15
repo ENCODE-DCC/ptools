@@ -14,6 +14,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libz-dev \
     libbz2-dev \
     libncurses5-dev \
+    libcurl4-openssl-dev \
     python3-pip
 
 
