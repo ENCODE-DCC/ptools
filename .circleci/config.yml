@@ -65,9 +65,6 @@ jobs:
             docker pull encodedcc/ptools:template
             docker login -u=${DOCKERHUB_USER} -p=${DOCKERHUB_PASS}
             docker build --cache-from encodedcc/ptools:template \
-                --build-arg GIT_COMMIT_HASH=${CIRCLE_SHA1} \
-                --build-arg BRANCH=${CIRCLE_BRANCH} \
-                --build-arg BUILD_PTOOLS_DOCKER_IMAGE_TAG=${PTOOLS_DOCKER_IMAGE_TAG} \
                 -t $PTOOLS_DOCKER_IMAGE_TAG .
             docker push $PTOOLS_DOCKER_IMAGE_TAG
             docker logout
