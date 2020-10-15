@@ -1,5 +1,5 @@
 # Dockerfile for ENCODE-DCC ptools pipeline
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 MAINTAINER Otto Jolanki 
 
 RUN apt-get update && apt-get install -y \
@@ -36,5 +36,4 @@ RUN git clone --branch 1.4 --single-branch https://github.com/samtools/samtools.
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install python dependencies
-RUN pip3 install --upgrade pip3
 RUN pip3 install numpy biopython
