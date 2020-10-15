@@ -1,5 +1,5 @@
 # Dockerfile for ENCODE-DCC ptools pipeline
-FROM ubuntu:20.04
+FROM ubuntu@sha256:2e70e9c81838224b5311970dbf7ed16802fbfe19e7a70b3cbfa3d7522aa285b4
 MAINTAINER Otto Jolanki 
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
