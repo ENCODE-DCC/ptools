@@ -3,11 +3,10 @@
 bam_path=$1
 reference_fasta=$2
 
-bam_basename=$(basename $bam)
+bam_basename=$(basename $bam_path)
 bam_prefix=${bam_basename%.bam}
 
 
-module load Python
 samtools view -H ${bam_path} > header.txt
 samtools view ${bam_path} | awk '{if ($6~/N/) {print $0}}' > withN.sam
 samtools view ${bam_path} | awk '{if ($6!~/N/) {print $0}}' > withoutN.sam
