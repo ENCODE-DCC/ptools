@@ -2,15 +2,17 @@
 
 
 
-pbam=$1
+pbam_path=$1
 ref=$2
 tmp=$3
-prompt=$4
+run_type=$4
+diff=$5
 
-
-mkdir $tmp
+pbam_basename=$(basename "$pbam_path")
+pbam_prefix=${pbam_basename%.p.bam}
+mkdir "$tmp"
 #get the header
-samtools view -H ${pbam}.p.bam > $tmp/header.txt
+samtools view -H "${pbam_path}" > "$tmp"/header.txt
 #create bam file
-samtools view ${pbam}.p.bam | python pbam2bam.py ${prompt} ${ref} ${pbam}.diff $tmp $tmp/header.txt  | samtools view -h -bS - > $pbam\.bam
-rm -rf $tmp
+samtools view "${pbam_path}" | python pbam2bam.py "${run_type}" "${ref}" "${diff}" "$tmp" "$tmp"/header.txt  | samtools view -h -bS - > "${pbam_prefix}".bam
+rm -rf "$tmp"
