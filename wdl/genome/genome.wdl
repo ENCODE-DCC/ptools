@@ -15,11 +15,12 @@ workflow genome {
     }
 
     call makepBAM {
-        bam=bam,
-        reference_fasta=reference_fasta,
-        cpu=cpu,
-        ramGB=ramGB,
-        disk=disk,
+        input:
+          bam=bam,
+          reference_fasta=reference_fasta,
+          cpu=cpu,
+          memory_gb=memory_gb,
+          disk=disk,
     }
 }
 
@@ -29,14 +30,14 @@ task makepBAM {
         File reference_fasta
         Int cpu
         Int memory_gb 
-        Int disk
+        String disk
     }
 
     String bam_prefix = basename(bam, ".bam")
 
     command {
-        cd genome
-        ./makepBAM.sh ~{bam} ~{ref}
+        cd /software/genome
+        ./makepBAM.sh ~{bam} ~{reference_fasta}
     }
 
     output {
@@ -45,7 +46,7 @@ task makepBAM {
 
     runtime {
         cpu: cpu
-        memory: "~{resources.memory_gb} GB"
-        disks: resources.disks
+        memory: "~{memory_gb} GB"
+        disks: disk
     }
 }
