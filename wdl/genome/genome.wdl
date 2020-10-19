@@ -37,7 +37,7 @@ task makepBAM {
     String out = bam_prefix + ".p.bam"
 
     command {
-        $(which makepBAM.sh) ~{bam} ~{reference_fasta}
+        $(which makepBAM_genome.sh) ~{bam} ~{reference_fasta}
     }
 
     output {
