@@ -42,6 +42,6 @@ RUN pip3 install numpy biopython
 RUN mkdir -p 10xscell/pbam 10xscell/pfastq
 COPY /10xscell/pbam 10xscell/pbam
 COPY /10xscell/pfastq 10xscell/pfastq
-
 RUN mkdir genome
 COPY /genome genome
+ENV PATH="/software/genome:/software/10xscell/pbam:/software/10xscell/pfastq:${PATH}"

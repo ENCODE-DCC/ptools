@@ -34,14 +34,14 @@ task makepBAM {
     }
 
     String bam_prefix = basename(bam, ".bam")
+    String out = bam_prefix + ".p.bam"
 
     command {
-        cd /software/genome
-        ./makepBAM.sh ~{bam} ~{reference_fasta}
+        $(which makepBAM.sh) ~{bam} ~{reference_fasta}
     }
 
     output {
-        File pbam = "genome/~{bam_prefix}.p.bam"
+        File pbam = out
     }
 
     runtime {
