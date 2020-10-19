@@ -43,3 +43,5 @@ RUN mkdir -p 10xscell/pbam 10xscell/pfastq
 COPY /10xscell/pbam 10xscell/pbam
 COPY /10xscell/pfastq 10xscell/pfastq
 
+RUN mkdir genome
+COPY /genome genome
