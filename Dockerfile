@@ -37,3 +37,9 @@ RUN git clone --branch 1.11 --single-branch https://github.com/samtools/samtools
 
 # Install python dependencies
 RUN pip3 install numpy biopython
+
+# Copy scripts into the image
+RUN mkdir -p 10xscell/pbam 10xscell/pfastq
+COPY /10xscell/pbam 10xscell/pbam
+COPY /10xscell/pfastq 10xscell/pfastq
+
