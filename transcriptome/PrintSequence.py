@@ -60,6 +60,6 @@ class Lookup:
 
 # This ensures that when we run the program that we assign tbl to the class and input our reference genome (genome.fa) as our file (f in __init__(self, f)).
 if __name__ == "__main__":
-    tbl = Lookup("../gencode.v19.pc_transcripts.fa")
+    tbl = Lookup("genome.fa")
 
     print("Initialization complete.")
