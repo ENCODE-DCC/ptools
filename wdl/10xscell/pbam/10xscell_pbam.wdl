@@ -33,14 +33,16 @@ task makepBAM {
     }
 
     String bam_prefix = basename(bam, ".bam")
+    String out = bam_prefix + ".p.bam"
 
     command {
-        cd 10xscell/pbam
-        ./makepBAM.sh ~{bam} ~{ref}
+        $(which makepBAM_10x.sh) \ 
+            ~{bam} \
+            ~{ref}
     }
 
     output {
-        File pbam = "10xscell/pbam/~{bam_prefix}.p.bam"
+        File pbam = out
     }
 
     runtime {

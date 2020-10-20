@@ -37,7 +37,9 @@ task makepbam {
     String out = bam_prefix + ".sorted.p.bam"
 
     command {
-        $(which makepBAM_genome.sh) ~{bam} ~{reference_fasta}
+        $(which makepBAM_genome.sh) \
+            ~{bam} \
+            ~{reference_fasta}
     }
 
     output {

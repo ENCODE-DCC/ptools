@@ -46,4 +46,6 @@ RUN mkdir genome
 COPY /genome genome
 RUN mkdir diff
 COPY /diff diff
-ENV PATH="/software/diff:/software/genome:/software/10xscell/pbam:/software/10xscell/pfastq:${PATH}"
+RUN mkdir pbam2bam
+COPY /pbam2bam pbam2bam
+ENV PATH="/software/pbam2bam:/software/diff:/software/genome:/software/10xscell/pbam:/software/10xscell/pfastq:${PATH}"

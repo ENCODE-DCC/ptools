@@ -34,7 +34,8 @@ task makediff {
     String out = bam_prefix + ".diff"
 
     command {
-        $(which makeDiff.sh) ~{bam}
+        $(which makeDiff.sh) \
+            ~{bam}
     }
 
     output {
