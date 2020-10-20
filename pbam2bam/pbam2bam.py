@@ -10,14 +10,7 @@ import gzip
 import numpy as np
 import PrintSequence
 import PrintTransSequence
-
-# following is necessary for querying sequences from reference genome
-if sys.argv[1] == "genome":
-    with open(sys.argv[2], "rt") as f:
-        ref = PrintSequence.Lookup(f)
-if sys.argv[1] == "transcriptome":
-    with open(sys.argv[2], "rt") as f:
-        ref = PrintTransSequence.Lookup(f)
+import io
 
 
 def ModifySequence(SOI, loc, mod):
@@ -168,26 +161,27 @@ def CheckNM(pBAMline):
     return NMcolumn
 
 
-def decompress(diff, tmpfolder):
-    fp = open(diff, "rb")
-    comptext = fp.read()
-    decompressed = zlib.decompress(comptext)
-
-
+# following is necessary for querying sequences from reference genome
+if sys.argv[1] == "genome":
+    with open(sys.argv[2], "rt") as f:
+        ref = PrintSequence.Lookup(f)
+if sys.argv[1] == "transcriptome":
+    with open(sys.argv[2], "rt") as f:
+        ref = PrintTransSequence.Lookup(f)
 diffile = sys.argv[3]
 tmpfolder = sys.argv[4]
-fp = open(diffile, "rb")
-comptext = fp.read()
-decompressed = zlib.decompress(comptext)
-savedecomp = open(tmpfolder +  diffile , "wb")
-savedecomp.write(decompressed)
-savedecomp.close()
 
+with open(diffile, "rb") as fp:
+    comptext = fp.read()
+
+decompressed = zlib.decompress(comptext)
+
+with open(diffile + ".txt", "wb") as savedecomp:
+    savedecomp.write(decompressed)
 
 bam = []
-import io
 
-fileA = open(tmpfolder + "/" + diffile + ".txt", "r")
+fileA = open(diffile + ".txt", "r")
 
 hed = open(sys.argv[5], "r")
 header = []

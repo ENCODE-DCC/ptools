@@ -46,7 +46,7 @@ task makebam {
         $(which makeBAM.sh) \
             ~{pbam} \
             ~{reference_fasta} \
-            tmp \
+            FOO \
             ~{run_type} \
             ~{diff}
     }
