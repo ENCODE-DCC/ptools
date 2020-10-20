@@ -179,7 +179,7 @@ tmpfolder = sys.argv[4]
 fp = open(diffile, "rb")
 comptext = fp.read()
 decompressed = zlib.decompress(comptext)
-savedecomp = open(tmpfolder + "/" + diffile + ".txt", "wb")
+savedecomp = open(tmpfolder +  diffile , "wb")
 savedecomp.write(decompressed)
 savedecomp.close()
 
