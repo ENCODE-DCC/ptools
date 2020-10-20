@@ -14,5 +14,5 @@ mkdir "$tmp"
 #get the header
 samtools view -H "${pbam_path}" > "$tmp"/header.txt
 #create bam file
-samtools view "${pbam_path}" | python pbam2bam.py "${run_type}" "${ref}" "${diff}" "$tmp" "$tmp"/header.txt  | samtools view -h -bS - > "${pbam_prefix}".bam
+samtools view "${pbam_path}" | python3 $(which pbam2bam.py) "${run_type}" "${ref}" "${diff}" "$tmp" "$tmp"/header.txt  | samtools view -h -bS - > "${pbam_prefix}".bam
 rm -rf "$tmp"

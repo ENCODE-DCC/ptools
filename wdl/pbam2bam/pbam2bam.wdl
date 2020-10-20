@@ -33,13 +33,13 @@ task makebam {
         File pbam
         File diff
         File reference_fasta
-        String run_rype
+        String run_type
         Int cpu
         Int memory_gb
         String disk
     }
 
-    String prefix = basename(diff, ".diff")
+    String prefix = basename(pbam, ".p.bam")
     String out = prefix + ".bam"
 
     command {
@@ -49,6 +49,10 @@ task makebam {
             tmp \
             ~{run_type} \
             ~{diff}
+    }
+
+    output {
+        File bam = out
     }
 
     runtime {
