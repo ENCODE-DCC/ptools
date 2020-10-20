@@ -44,4 +44,6 @@ COPY /10xscell/pbam 10xscell/pbam
 COPY /10xscell/pfastq 10xscell/pfastq
 RUN mkdir genome
 COPY /genome genome
-ENV PATH="/software/genome:/software/10xscell/pbam:/software/10xscell/pfastq:${PATH}"
+RUN mkdir diff
+COPY /diff diff
+ENV PATH="/software/diff:/software/genome:/software/10xscell/pbam:/software/10xscell/pfastq:${PATH}"

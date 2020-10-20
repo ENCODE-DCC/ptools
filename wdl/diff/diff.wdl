@@ -1,47 +1,44 @@
 version 1.0
 
-workflow genome {
+workflow diff {
     meta {
         version:"1.0.1"
         caper_docker:"encodedcc/ptools:1.0.1"
     }
-
+    
     input {
-       File bam
-       File reference_fasta
-       Int cpu
-       Int memory_gb
-       String disk
+        File bam
+        Int cpu
+        Int memory_gb
+        String disk
     }
 
-    call makepbam {
+    call makediff {
         input:
             bam=bam,
-            reference_fasta=reference_fasta,
             cpu=cpu,
             memory_gb=memory_gb,
             disk=disk,
     }
 }
 
-task makepbam {
+task makediff {
     input {
         File bam
-        File reference_fasta
         Int cpu
-        Int memory_gb 
+        Int memory_gb
         String disk
     }
 
     String bam_prefix = basename(bam, ".bam")
-    String out = bam_prefix + ".sorted.p.bam"
+    String out = bam_prefix + ".diff"
 
     command {
-        $(which makepBAM_genome.sh) ~{bam} ~{reference_fasta}
+        $(which makeDiff.sh) ~{bam}
     }
 
     output {
-        File pbam = out
+        File diff = out
     }
 
     runtime {
