@@ -10,14 +10,21 @@ import gzip
 import numpy as np
 import PrintSequence
 import PrintTransSequence
-import io
+
+# following is necessary for querying sequences from reference genome
+if sys.argv[1] == "genome":
+    with open(sys.argv[2], "rt") as f:
+        ref = PrintSequence.Lookup(f)
+if sys.argv[1] == "transcriptome":
+    with open(sys.argv[2], "rt") as f:
+        ref = PrintTransSequence.Lookup(f)
 
 
 def ModifySequence(SOI, loc, mod):
     BB = []
     SOI_index = 0
     j = 0
-    for i in range(0, len(loc)):
+    for i in xrange(0, len(loc)):
         modtype = loc[i][1]
         modloc = int(loc[i][0])
 
@@ -81,7 +88,7 @@ def countbps(
     l1,
 ):  # Count basepairs from diff cigar string rather than pBAM cigar string (otherwise N's are treated as true deletions, rather than introns)
     bps = 0
-    for i in range(0, len(l1)):
+    for i in xrange(0, len(l1)):
         modloc = int(l1[i][0])
         if l1[i][1] != "D" or l1[i][1] != "H":
             bps = bps + modloc
@@ -161,27 +168,26 @@ def CheckNM(pBAMline):
     return NMcolumn
 
 
-# following is necessary for querying sequences from reference genome
-if sys.argv[1] == "genome":
-    with open(sys.argv[2], "rt") as f:
-        ref = PrintSequence.Lookup(f)
-if sys.argv[1] == "transcriptome":
-    with open(sys.argv[2], "rt") as f:
-        ref = PrintTransSequence.Lookup(f)
+def decompress(diff, tmpfolder):
+    fp = open(diff, "rb")
+    comptext = fp.read()
+    decompressed = zlib.decompress(comptext)
+
+
 diffile = sys.argv[3]
 tmpfolder = sys.argv[4]
-
-with open(diffile, "rb") as fp:
-    comptext = fp.read()
-
+fp = open(diffile, "rb")
+comptext = fp.read()
 decompressed = zlib.decompress(comptext)
+savedecomp = open(tmpfolder + "/" + diffile + ".txt", "wb")
+savedecomp.write(decompressed)
+savedecomp.close()
 
-with open(diffile + ".txt", "wb") as savedecomp:
-    savedecomp.write(decompressed)
 
 bam = []
+import io
 
-fileA = open(diffile + ".txt", "r")
+fileA = open(tmpfolder + "/" + diffile + ".txt", "r")
 
 hed = open(sys.argv[5], "r")
 header = []
