@@ -112,6 +112,7 @@ def parseMDZ(string):
 
 
 # Modify the sequence that came from ModifySeq based off of parsed MDZ strings
+#Note 2 GG, rewrite this function after creating new diff
 def ModifySeqII(seq, mdz):
     i = 0
     newseq = ""
@@ -236,7 +237,8 @@ for lineA, lineB in zip(fileA, fileB):
             if len(MDarray) == 1:
                 seq = final.upper()
             else:
-                seq = ModifySeqII(final.upper(), MDarray)
+                #seq = ModifySeqII(final.upper(), MDarray)
+                seq = final.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]
             if CheckMD(diff) != -1:
@@ -249,7 +251,8 @@ for lineA, lineB in zip(fileA, fileB):
             if len(MDarray) == 1:
                 seq = seq1.upper()
             else:
-                seq = ModifySeqII(seq1.upper(), MDarray)
+                #seq = ModifySeqII(seq1.upper(), MDarray)
+                seq = final.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]
             if CheckMD(diff) != -1:
