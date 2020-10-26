@@ -112,7 +112,7 @@ def parseMDZ(string):
 
 
 # Modify the sequence that came from ModifySeq based off of parsed MDZ strings
-#Note 2 GG, rewrite this function after creating new diff
+# Note 2 GG, rewrite this function after creating new diff
 def ModifySeqII(seq, mdz):
     i = 0
     newseq = ""
@@ -168,18 +168,11 @@ def CheckNM(pBAMline):
     return NMcolumn
 
 
-def decompress(diff, tmpfolder):
-    fp = open(diff, "rb")
-    comptext = fp.read()
-    decompressed = zlib.decompress(comptext)
-
-
 diffile = sys.argv[3]
-tmpfolder = sys.argv[4]
 fp = open(diffile, "rb")
 comptext = fp.read()
 decompressed = zlib.decompress(comptext)
-savedecomp = open(tmpfolder + "/" + diffile + ".txt", "wb")
+savedecomp = open(diffile + ".txt", "wb")
 savedecomp.write(decompressed)
 savedecomp.close()
 
@@ -187,9 +180,9 @@ savedecomp.close()
 bam = []
 import io
 
-fileA = open(tmpfolder + "/" + diffile + ".txt", "r")
+fileA = open(diffile + ".txt", "r")
 
-hed = open(sys.argv[5], "r")
+hed = open(sys.argv[4], "r")
 header = []
 for line in hed:
     header.append(line.split("\n")[0])
@@ -237,7 +230,7 @@ for lineA, lineB in zip(fileA, fileB):
             if len(MDarray) == 1:
                 seq = final.upper()
             else:
-                #seq = ModifySeqII(final.upper(), MDarray)
+                # seq = ModifySeqII(final.upper(), MDarray)
                 seq = final.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]
@@ -251,7 +244,7 @@ for lineA, lineB in zip(fileA, fileB):
             if len(MDarray) == 1:
                 seq = seq1.upper()
             else:
-                #seq = ModifySeqII(seq1.upper(), MDarray)
+                # seq = ModifySeqII(seq1.upper(), MDarray)
                 seq = seq1.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]
