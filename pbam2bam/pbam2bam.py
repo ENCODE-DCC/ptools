@@ -24,7 +24,7 @@ def ModifySequence(SOI, loc, mod):
     BB = []
     SOI_index = 0
     j = 0
-    for i in xrange(0, len(loc)):
+    for i in range(0, len(loc)):
         modtype = loc[i][1]
         modloc = int(loc[i][0])
 
@@ -88,7 +88,7 @@ def countbps(
     l1,
 ):  # Count basepairs from diff cigar string rather than pBAM cigar string (otherwise N's are treated as true deletions, rather than introns)
     bps = 0
-    for i in xrange(0, len(l1)):
+    for i in range(0, len(l1)):
         modloc = int(l1[i][0])
         if l1[i][1] != "D" or l1[i][1] != "H":
             bps = bps + modloc
@@ -252,7 +252,7 @@ for lineA, lineB in zip(fileA, fileB):
                 seq = seq1.upper()
             else:
                 #seq = ModifySeqII(seq1.upper(), MDarray)
-                seq = final.upper()
+                seq = seq1.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]
             if CheckMD(diff) != -1:
