@@ -18,6 +18,13 @@ workflow transcriptome {
 
     call makepbam {
         input:
+            bam=bam,
+            genome_fasta=genome_fasta,
+            transcriptome_fasta=transcriptome_fasta,
+            annotation_gtf=annotation_gtf,
+            cpu=cpu,
+            memory_gb=memory_gb,
+            disk=disk,
     }
 }
 
