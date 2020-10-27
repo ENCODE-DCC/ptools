@@ -47,7 +47,7 @@ task makepBAM {
 
     runtime {
         cpu: cpu
-        memory: "~{resources.memory_gb} GB"
-        disks: resources.disks
+        memory: "~{memory_gb} GB"
+        disks: disk
     }
 }

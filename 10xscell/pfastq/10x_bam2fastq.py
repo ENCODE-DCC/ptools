@@ -19,8 +19,6 @@ fileI = gzip.open(sys.argv[1] + "_I1.fastq.gz", "wb")
 fileR1 = gzip.open(sys.argv[1] + "_R1.fastq.gz", "wb")
 fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "wb")
 
-# filein=open(sys.argv[1],'r')
-
 
 def makeI(str1, str2, str3):
     fileI.write("@" + str1 + " 1:N:0:" + str2 + "\n")
@@ -65,15 +63,6 @@ def makeR2(str1, str2, str3, str4):
 
 
 fileB = sys.stdin
-
-# linenumbers=[]
-# for line in filein:
-#       a=line.rstrip()
-#       b=a.split('\t')
-#       linenumbers.append(int(b[4]))
-
-# filein.close()
-
 
 j = -1
 for lineB in fileB:
