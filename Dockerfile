@@ -39,7 +39,7 @@ RUN git clone --branch 1.11 --single-branch https://github.com/samtools/samtools
 RUN pip3 install numpy biopython pandas
 
 # Copy scripts into the image
-RUN mkdir -b 10xscell/pfastq
+RUN mkdir -p 10xscell/pfastq
 COPY /10xscell/pfastq 10xscell/pfastq
 RUN mkdir genome
 COPY /genome genome
