@@ -29,7 +29,7 @@ def makeI(str1, str2, str3):
     if len(str3) < len(str2):
         for i in range(0, len(str2) - len(str3)):
             str3 = str3 + "F"
-    fileI.write(str3 + "\n")
+    fileI.write(bytes(str3 + "\n", encoding="utf-8"))
 
 
 def makeR1(str1, str2, str3, str4, str5, str6):
@@ -47,7 +47,7 @@ def makeR1(str1, str2, str3, str4, str5, str6):
     if len(str6) < len(str4):
         for i in range(0, len(str4) - len(str6)):
             str6 = str6 + "F"
-    fileR1.write(str5 + str6 + "\n")
+    fileR1.write(bytes(str5 + str6 + "\n", encoding="utf-8"))
 
 
 def makeR2(str1, str2, str3, str4):
@@ -59,7 +59,7 @@ def makeR2(str1, str2, str3, str4):
     if len(str4) < len(str3):
         for i in range(0, len(str3) - len(str4)):
             str4 = str4 + "F"
-    fileR2.write(str4 + "\n")
+    fileR2.write(bytes(str4 + "\n", encoding="utf-8"))
 
 
 fileB = sys.stdin
