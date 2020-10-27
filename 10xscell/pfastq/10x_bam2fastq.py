@@ -15,9 +15,9 @@ import io
 
 # python 10x_bam2fastq_v2.py chr${i}_unique.txt s${i}
 
-fileI = gzip.open(sys.argv[1] + "_I1.fastq.gz", "wb")
-fileR1 = gzip.open(sys.argv[1] + "_R1.fastq.gz", "wb")
-fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "wb")
+fileI = gzip.open(sys.argv[1] + "_I1.fastq.gz", "w")
+fileR1 = gzip.open(sys.argv[1] + "_R1.fastq.gz", "w")
+fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "w")
 
 
 def makeI(str1, str2, str3):
