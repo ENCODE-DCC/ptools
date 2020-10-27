@@ -21,8 +21,8 @@ fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "w")
 
 
 def makeI(str1, str2, str3):
-    fileI.write("@" + str1 + " 1:N:0:" + str2 + "\n")
-    fileI.write(str2 + "\n+\n")
+    fileI.write(bytes("@" + str1 + " 1:N:0:" + str2 + "\n", encoding="utf-8"))
+    fileI.write(bytest(str2 + "\n+\n", encoding="utf-8"))
     if str3 == "":
         for i in range(0, len(str2)):
             str3 = str3 + "F"
@@ -33,8 +33,8 @@ def makeI(str1, str2, str3):
 
 
 def makeR1(str1, str2, str3, str4, str5, str6):
-    fileR1.write("@" + str1 + " 1:N:0:" + str2 + "\n")
-    fileR1.write(str3 + str4 + "\n+\n")
+    fileR1.write(bytes("@" + str1 + " 1:N:0:" + str2 + "\n", encoding="utf-8"))
+    fileR1.write(bytes(str3 + str4 + "\n+\n", encoding="utf-8"))
     if str5 == "":
         for i in range(0, len(str3)):
             str5 = str5 + "F"
@@ -51,8 +51,8 @@ def makeR1(str1, str2, str3, str4, str5, str6):
 
 
 def makeR2(str1, str2, str3, str4):
-    fileR2.write("@" + str1 + " 2:N:0:" + str2 + "\n")
-    fileR2.write(str3 + "\n+\n")
+    fileR2.write(bytes("@" + str1 + " 2:N:0:" + str2 + "\n", encoding="utf-8"))
+    fileR2.write(bytes(str3 + "\n+\n", encoding="utf-8"))
     if str4 == "":
         for i in range(0, len(str3)):
             str4 = str4 + "F"
