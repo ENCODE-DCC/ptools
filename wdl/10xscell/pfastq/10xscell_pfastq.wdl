@@ -1,6 +1,6 @@
 version 1.0
 
-workflow 10xscell_pfastq {
+workflow tenxscell_pfastq {
     input {
         File pbam
         Int cpu
@@ -9,10 +9,11 @@ workflow 10xscell_pfastq {
     }
 
     call makeFastq {
-        pbam=pbam,
-        cpu=cpu,
-        memory_gb=memory_gb,
-        disk=disk,
+        input:
+            pbam=pbam,
+            cpu=cpu,
+            memory_gb=memory_gb,
+            disk=disk,
     }
 }
 
