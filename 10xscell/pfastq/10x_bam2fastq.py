@@ -22,7 +22,7 @@ fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "w")
 
 def makeI(str1, str2, str3):
     fileI.write(bytes("@" + str1 + " 1:N:0:" + str2 + "\n", encoding="utf-8"))
-    fileI.write(bytest(str2 + "\n+\n", encoding="utf-8"))
+    fileI.write(bytes(str2 + "\n+\n", encoding="utf-8"))
     if str3 == "":
         for i in range(0, len(str2)):
             str3 = str3 + "F"
