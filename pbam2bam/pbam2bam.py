@@ -134,10 +134,6 @@ def ModifySeqII(seq, mdz):
     return newseq
 
 
-##############################################
-#############################################
-
-
 def CheckAS(pBAMline):
     array = pBAMline.split("\t")
     AScolumn = -1
@@ -230,7 +226,6 @@ for lineA, lineB in zip(fileA, fileB):
             if len(MDarray) == 1:
                 seq = final.upper()
             else:
-                # seq = ModifySeqII(final.upper(), MDarray)
                 seq = final.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]
@@ -244,7 +239,6 @@ for lineA, lineB in zip(fileA, fileB):
             if len(MDarray) == 1:
                 seq = seq1.upper()
             else:
-                # seq = ModifySeqII(seq1.upper(), MDarray)
                 seq = seq1.upper()
             if CheckAS(diff) != -1:
                 bam[AS] = difflist[CheckAS(diff)]

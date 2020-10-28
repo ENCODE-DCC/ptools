@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 pbam_path=$1
 
 pbam_basename=$(basename "$pbam_path")

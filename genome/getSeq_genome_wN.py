@@ -47,9 +47,7 @@ hed.close()
 for i in range(0, len(header)):
     print("%s" % header[i])
 
-# fileB = sys.stdin
 fileB = open(sys.argv[3], "r")
-# RL=len(pbam[9])
 for lineB in fileB:
     p = lineB.rstrip()
     pbam = p.split("\t")

@@ -14,9 +14,6 @@ import numpy as np
 import io
 
 
-# filein=open(sys.argv[1],'r')
-
-
 fileB = sys.stdin
 
 

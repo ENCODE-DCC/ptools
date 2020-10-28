@@ -35,8 +35,6 @@ for i in range(0, len(header)):
     print("%s" % header[i])
 
 fileB = open(sys.argv[3], "r")
-# fileB = sys.stdin
-# RL=len(pbam[9])
 for lineB in fileB:
     p = lineB.rstrip()
     pbam = p.split("\t")
@@ -62,7 +60,6 @@ for lineB in fileB:
             pbam[5] = str(RL - a) + "M" + str(a) + "S"
             for i in range(0, a):
                 pbam[9] = pbam[9] + "N"
-        #           pbam[5] = str(RL-a)+"M"
     else:
         pbam[9] = pbam[9]
         pbam[5] = pbam[5]

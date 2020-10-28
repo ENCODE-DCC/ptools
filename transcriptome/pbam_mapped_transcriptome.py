@@ -53,10 +53,7 @@ def getFromGtfandGFa(transc, pos, length):
     return seq
 
 
-# fileB = open(sys.argv[3], "r")
-# bam file
 fileB = sys.stdin
-# RL=len(pbam[9])
 for lineB in fileB:
     p = lineB.rstrip()
     pbam = p.split("\t")
