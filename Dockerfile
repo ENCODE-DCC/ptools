@@ -36,7 +36,7 @@ RUN git clone --branch 1.11 --single-branch https://github.com/samtools/samtools
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install python dependencies
-RUN pip3 install numpy biopython pandas
+RUN pip3 install numpy==1.19.2 biopython==1.78 pandas==1.1.3
 
 # Copy scripts into the image
 RUN mkdir -p 10xscell/pfastq
