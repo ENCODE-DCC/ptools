@@ -63,18 +63,16 @@ def cigparse(cigar):
         else:
             l1.append([int(num1), c1])
             num1 = ""
-    return l1  # Remember to change 'print' back to 'return' after sanity check
+    return l1
 
 
 def getfseq(cigar, seq):
     a = cigparse(cigar)
-    #       print(a)
     # b is the sequence
     b = seq
     start = 0
     m = ""
     k = ""
-    # print(len(a))
     for i in range(0, len(a)):
         if a[i][1] in "M":
             start = start + a[i][0]
@@ -84,11 +82,9 @@ def getfseq(cigar, seq):
             k = ""
         if a[i][1] in "SIX":
             tup = b[start : start + a[i][0]]
-            #       print(tup)
             k = tup + ":" + str(a[i][1]) + "-"
             start = start + a[i][0]
         m = m + k
-    #       print(m)
     return m[0 : len(m) - 1]
 
 

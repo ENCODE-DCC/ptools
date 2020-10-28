@@ -45,9 +45,9 @@ class Lookup:
 
     # This query function will automatically fill in the 'self' argument, but will then accept the chromosome number as 'chr$c'--where $c is a natural number, pos is the position number, and len is the number of basepairs
 
-    def query(self, chrom, pos, len):
+    def query(self, chrom, pos, length):
         if chrom in self.chroms:
-            return str(self.chroms[chrom][pos : pos + len])
+            return str(self.chroms[chrom][pos : pos + length])
         else:
             return 0  # str returns a string version of our output. Our output is the object we created, the dictionary using key chrom, and indexed from our starting position to our position plus number of basepairs.
 

@@ -1,6 +1,0 @@
-Usage: sh makepBAM.sh <bam> <ref>
-
-input: <bam> is the bam file that you want to process
-       <ref> is the reference genome fasta
-
-output: <bam_prefix>.p.bam, a p.bam file that has the same name as the bam before the extension. For example if bam filenam is FOO.bam, then the corresponding p.pam filename is FOO.p.bam.

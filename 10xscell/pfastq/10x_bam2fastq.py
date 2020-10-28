@@ -15,28 +15,26 @@ import io
 
 # python 10x_bam2fastq_v2.py chr${i}_unique.txt s${i}
 
-fileI = gzip.open(sys.argv[1] + "_I1.fastq.gz", "wb")
-fileR1 = gzip.open(sys.argv[1] + "_R1.fastq.gz", "wb")
-fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "wb")
-
-# filein=open(sys.argv[1],'r')
+fileI = gzip.open(sys.argv[1] + "_I1.fastq.gz", "w")
+fileR1 = gzip.open(sys.argv[1] + "_R1.fastq.gz", "w")
+fileR2 = gzip.open(sys.argv[1] + "_R2.fastq.gz", "w")
 
 
 def makeI(str1, str2, str3):
-    fileI.write("@" + str1 + " 1:N:0:" + str2 + "\n")
-    fileI.write(str2 + "\n+\n")
+    fileI.write(bytes("@" + str1 + " 1:N:0:" + str2 + "\n", encoding="utf-8"))
+    fileI.write(bytes(str2 + "\n+\n", encoding="utf-8"))
     if str3 == "":
         for i in range(0, len(str2)):
             str3 = str3 + "F"
     if len(str3) < len(str2):
         for i in range(0, len(str2) - len(str3)):
             str3 = str3 + "F"
-    fileI.write(str3 + "\n")
+    fileI.write(bytes(str3 + "\n", encoding="utf-8"))
 
 
 def makeR1(str1, str2, str3, str4, str5, str6):
-    fileR1.write("@" + str1 + " 1:N:0:" + str2 + "\n")
-    fileR1.write(str3 + str4 + "\n+\n")
+    fileR1.write(bytes("@" + str1 + " 1:N:0:" + str2 + "\n", encoding="utf-8"))
+    fileR1.write(bytes(str3 + str4 + "\n+\n", encoding="utf-8"))
     if str5 == "":
         for i in range(0, len(str3)):
             str5 = str5 + "F"
@@ -49,31 +47,22 @@ def makeR1(str1, str2, str3, str4, str5, str6):
     if len(str6) < len(str4):
         for i in range(0, len(str4) - len(str6)):
             str6 = str6 + "F"
-    fileR1.write(str5 + str6 + "\n")
+    fileR1.write(bytes(str5 + str6 + "\n", encoding="utf-8"))
 
 
 def makeR2(str1, str2, str3, str4):
-    fileR2.write("@" + str1 + " 2:N:0:" + str2 + "\n")
-    fileR2.write(str3 + "\n+\n")
+    fileR2.write(bytes("@" + str1 + " 2:N:0:" + str2 + "\n", encoding="utf-8"))
+    fileR2.write(bytes(str3 + "\n+\n", encoding="utf-8"))
     if str4 == "":
         for i in range(0, len(str3)):
             str4 = str4 + "F"
     if len(str4) < len(str3):
         for i in range(0, len(str3) - len(str4)):
             str4 = str4 + "F"
-    fileR2.write(str4 + "\n")
+    fileR2.write(bytes(str4 + "\n", encoding="utf-8"))
 
 
 fileB = sys.stdin
-
-# linenumbers=[]
-# for line in filein:
-#       a=line.rstrip()
-#       b=a.split('\t')
-#       linenumbers.append(int(b[4]))
-
-# filein.close()
-
 
 j = -1
 for lineB in fileB:
