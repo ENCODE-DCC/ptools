@@ -1,0 +1,9 @@
+{
+    "pbam2bam.pbam": "/path/to/the.p.bam",
+    "pbam2bam.diff": "/path/to/the.diff",
+    "pbam2bam.run_type": "genome",
+    "pbam2bam.reference_fasta": "/path/to/the/reference/corresponding.to.the.p.bam.fasta",
+    "pbam2bam.cpu": 1,
+    "pbam2bam.memory_gb": 2,
+    "pbam2bam.disk": "local-disk 20 SSD"
+}
