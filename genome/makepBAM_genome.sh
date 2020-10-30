@@ -14,3 +14,7 @@ python3 $(which getSeq_genome_wN.py) "${reference_fasta}" header.txt withN.sam |
 python3 $(which getSeq_genome_woN.py) "${reference_fasta}" header.txt withoutN.sam | samtools view -h -bS - > withoutN.p.bam
 samtools merge "${bam_prefix}".p.bam withN.p.bam withoutN.p.bam
 samtools sort "${bam_prefix}".p.bam -o "${bam_prefix}".sorted.p.bam
+rm withN.sam withoutN.sam
+rm header.txt
+rm withN.p.bam withoutN.p.bam
+rm "${bam_prefix}".p.bam
