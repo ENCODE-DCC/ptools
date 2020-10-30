@@ -8,4 +8,4 @@ The workflows can be run using [caper](https://github.com/ENCODE-DCC/caper). Ins
 
 CONTENTS
 ---------------
-In `wdl` directory you will find workflows for all the supported formats. Alongside with the wdl file, an input json template is provided.
+In `wdl` directory you will find workflows for all the supported formats. Alongside with each wdl file, an input json template is provided.
