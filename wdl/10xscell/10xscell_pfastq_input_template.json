@@ -1,0 +1,6 @@
+{
+    "tenxscell_pfastq.pbam": "/path/to/the.p.bam",
+    "tenxscell_pfastq.cpu": 1,
+    "tenxscell_pfastq.memory_gb": 2,
+    "tenxscell_pfastq.disk": "local-disk 20 SSD"
+}

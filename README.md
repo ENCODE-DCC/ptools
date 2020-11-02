@@ -1,118 +1,71 @@
-# pTools
-Requirements are samtools, python3, biopython and numpy. Alternatively, you can use the command below and the "requirements.txt" file in the bundle to install the dependencies:
-```
-pip install requirements.txt
-```
-## BAM to pBAM conversion
-This is a combination of scripts that converts BAM files into a pBAM format.
-The list of corresponding folders are: (1) 10xscell/pbam/, (2) genome, (3) transcriptome
-### 10xscell/pbam
-This folder contains the code that converts a 10x single cell RNA-Seq BAM file into a pBAM format. The BAM file must be created by mapping the reads to the reference genome and keeping the unaligned reads in the BAM file. This folder contains the following scripts:
-* PrintSequence.py
-* getSeq_wN.py
-* getSeq_woN.py
-* makepBAM.sh
-* README
+# PTOOLS
 
-Usage:
-```
-sh makepBAM.sh <bam> <ref>
-```
-* bam : input BAM file. Name of the bam file before the ".bam" extension.
-* ref : input reference genome.  This should be the same reference genome that was used to generate the BAM file. Please use the full path.
-* This script will generate an output "<bam>.p.bam", a pBAM file that has the same name as the input BAM file
-  
-### genome
-This folder contains the code that converts a functional genomics BAM file into a pBAM format. This is specifically for BAM files that are created by mapping the reads to reference genome. This is the code to use for ChIP-Seq, ATAC-Seq and genome aligned RNA-Seq BAM files. This folder contains the following scripts:
-* PrintSequence.py
-* getSeq_wN.py
-* getSeq_woN.py
-* makepBAM.sh
-* README
+WDL based workflows for BAM-to-PBAM-to-BAM conversions. For additional information on the protocol and file formats, see http://privaseq3.gersteinlab.org/docs/.
 
-Usage:
+# REQUIREMENTS
+
+The workflows can be run using [caper](https://github.com/ENCODE-DCC/caper). Install caper following these [installation instructions](https://github.com/ENCODE-DCC/caper#installation).
+
+# CONTENTS
+
+In `wdl` directory you will find workflows for all the supported formats. Alongside with each wdl file, an input json template is provided.
+
+# WORKFLOW
+
+## Making pbam
+
+As an example, assume you have a `bam` file, that originates from bulk RNA sequencing experiment, and it has been aligned to human GRCh38 reference and you want to make a privacy-aware bam from it. The workflow you need is located in `wdl/genome/make_pbam_genome.wdl`, and the input template in `wdl/genome/genome_pbam_input_template.json`. 
+Fill in the locations of your `bam`, and reference files into the template. Acceptable file storages in addition to your local machine are `https://`, `gs://`, `s3://`:
+```json
+{
+    "genome.bam": "<your bam location here>",
+    "genome.reference_fasta": "<GRCh38.fasta location here>",
+    "genome.cpu": 1,
+    "genome.memory_gb": 2,
+    "genome.disk": "local-disk 20 SSD"
+}
 ```
-sh makepBAM.sh <bam> <ref> <dir>
+Save the input containing locations you your input files.
+
+Memory and disk requirements depend on the size of the input. Good starting point for disk is 5x the size of your `bam` file, and for memory 16GB should be sufficient for most `bam` files. Most of the processes for now are single process. Parallelized version will be available in the future.
+
+Run the workflow:
+```bash
+caper run -i <your_input.json> wdl/genome/make_pbam_genome.wdl -m metadata.json --docker
 ```
-* bam : input BAM file. Name of the bam file before the ".bam" extension.
-* ref : input reference genome.  This should be the same reference genome that was used to generate the BAM file. Please use the full path.
-* <dir> : a path for a temporary directory. 
-* This script will generate an output "<bam>.p.bam", a pBAM file that has the same name as the input BAM file
-  
-### transcriptome
+If you are using singularity use `--singularity` option instead of `--docker`.
 
-This folder contains the code that converts an RNA-Seq BAM file into a pBAM format. This is specifically for BAM files that are created by mapping the reads to reference transcriptome (such as those created by STAR alignment tool). This folder contains the following scripts:
-* PrintSequence.py
-* PrintTransSequence.py
-* pbam_mapped_transcriptome.py
-* makepBAM.sh
-* README
+After the run finishes, the `metadata.json` containing detailed information of the run is written. In `outputs` section of the `metadata.json` you will find the location of the `pbam` file.
 
-Usage:
+Assuming you are not intending anyone to be able to restore the information contained in the `bam` file, you are done. If you need to be able to reverse the transformation, you will need to create a `diff` file corresponding to your `bam`.
+
+Note that if your `bam` file was aligned to human transcriptome, then you can use the workflow located in `wdl/transcriptome/make_pbam_transcriptome.wdl`. For single-cell RNA-Seq data that was aligned to human reference genome using STAR, you can still use the workflow located in `wdl/genome/make_pbam_genome.wdl`.
+
+## Making diff
+
+The workflow and corresponding input template are located in `wdl/diff` directory. As above fill in the location of the `bam` file into the template:
 ```
-sh makepBAM.sh <bam> <gref> <tref> <gtf>
+{
+    "diff.bam": "<your bam location here>,
+    "diff.cpu": 1,
+    "diff.memory_gb": 2,
+    "diff.disk": "local-disk 20 SSD"
+}
 ```
-* bam : input BAM file. Name of the bam file before the ".bam" extension.
-* gref : input reference genome.  This should be the same reference genome that was used to generate the reference transcriptome and genome aligned RNA-seq BAM file. Please use the full path.
-* tref : input reference transcriptome.  This should be the same reference genome transcriptome was used to generate the transcriptome aligned BAM file. Please use the full path.
-* gtf : gene annotation file that was used to generate the transcriptome aligned RNA-seq BAM file. Please use the full path.
-* This script will generate an output "<bam>.p.bam", a pBAM file that has the same name as the input BAM file
-  
-## pBAM to pFastq conversion
+Memory and disk requirements and running is as above.
 
-Although "samtools fastq" option will be enough to convert the pBAM files to fastq files, 10x single-cell BAM files that are created using STAR alignments require a special fastq conversion. For this, we will use the folder "10xscell/pfastq/".
+## Restoring bam
 
-### 10xscell/pfastq
-
-This folder contains the code that converts a 10x single cell RNA-seq pBAM file into a pFastq format. This is specifically for BAM files that are created by mapping the reads to reference genome using STAR aligner (part of HCA Optimus pipeline). This folder contains the following scripts:
-* 10x_bam2fastq.py
-* makeFastq.sh
-* make_unique.py
-* print_unique.py
-* README
-
-Usage:
+To restore a regular `bam` from `pbam` and `diff` files you will need to use the workflow and input template located in `wdl/pbam2bam`. The process is very similar to the previous steps. Fill in the input files to the template:
 ```
-sh makeFastq.sh <pbam>
+{
+    "pbam2bam.pbam": "<your pbam location here>",
+    "pbam2bam.diff": "<corresponding diff location here>",
+    "pbam2bam.run_type": "genome",
+    "pbam2bam.reference_fasta": "<reference fasta location here>",
+    "pbam2bam.cpu": 1,
+    "pbam2bam.memory_gb": 2,
+    "pbam2bam.disk": "local-disk 20 SSD"
+}
 ```
-* pbam : input pBAM file. Name of the p.bam file before the "p.bam" extension.
-* This script will generate three output files that are named
-  * pbam_R1.fastq.gz, 
-  * pbam_R2.fastq.gz, 
-  * pbam_I1.fastq.gz
-  
-## BAM to .diff conversion
-
-This is a combination of scripts that converts BAM files into a .diff format. For this, we will use the folder "diff". This folder contains the following scripts:
-* createDiff.py
-* makeDiff.sh
-* compress.py
-* README
-
-Usage:
-```
-sh makeDiff.sh <bam>
-```
-* bam : input BAM file. Name of the bam file before the ".bam" extension.
-* This script will generate an output "<bam>.diff", a diff file that has the same name as the input BAM file
-  
-## pBAM + .diff to BAM conversion
-
-This is a combination of scripts that converts pBAM and .diff files into BAM format. For this, we will use the folder "pbam2bam". This folder contains the following scripts:
-* PrintSequence.py
-* PrintTransSequence.py
-* pbam2bam.py
-* makeBAM.sh
-* README
-
-Usage:
-```
-sh makeBAM.sh <pbam> <ref> <tmp> <prompt>
-```
-* pbam : input pBAM file. Name of the p.bam file before the "p.bam" extension.
-* ref : input reference genome.  This should be the same reference genome that is in the header of the pBAM file. Please use the full path.
-* tmp : a temporary folder name, will be deleted at the end of the run.
-* prompt : use "genome" for genome aligned pBAMs and "transcriptome" for transcriptome aligned pBAMs
-* This script will generate an output "<pbam>.bam", a BAM file that has the same name as the input and diff BAM file
-* MAKE SURE THE .diff AND THE .p.bam FILE HAS THE SAME EXACT NAME and are in the same folder
-
+Running and locating outputs is exactly same as before.

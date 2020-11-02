@@ -1,6 +1,11 @@
 version 1.0
 
 workflow tenxscell_pfastq {
+    meta {
+        version:"1.0.1"
+        caper_docker:"encodedcc/ptools:1.0.1"
+    }
+
     input {
         File pbam
         Int cpu

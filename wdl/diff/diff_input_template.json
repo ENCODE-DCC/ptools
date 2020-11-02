@@ -1,0 +1,6 @@
+{
+    "diff.bam": "/path/to/the.bam",
+    "diff.cpu": 1,
+    "diff.memory_gb": 2,
+    "diff.disk": "local-disk 20 SSD"
+}

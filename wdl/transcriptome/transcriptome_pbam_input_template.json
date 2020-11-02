@@ -1,0 +1,9 @@
+{
+    "transcriptome.bam" : "/path/to/the.bam",
+    "transcriptome.genome_fasta": "https://corresponding/genome.reference.fasta",
+    "transcriptome.transcriptome_fasta": "s3://corresponding/transcriptome.reference.fasta",
+    "transcriptome.annotation_gtf": "gs://corresponding/annotation.gtf",
+    "transcriptome.cpu": 1,
+    "transcriptome.memory_gb": 2,
+    "transcriptome.disk": "local-disk 20 SSD"
+}
