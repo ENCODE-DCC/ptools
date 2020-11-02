@@ -69,3 +69,13 @@ To restore a regular `bam` from `pbam` and `diff` files you will need to use the
 }
 ```
 Running and locating outputs is exactly same as before.
+
+# WITHOUT WDL/DOCKER
+
+We recommend you run the WDL workflows, but it is also possible run the scripts directly, although some setup will be necessary (obviously it cannot be guaranteed that even after following these instructions your environment will be exactly the same as in the docker image we use to run the WDL):
+* Install `python 3.8.5`
+* Install following python packages ` numpy==1.19.2 biopython==1.78 pandas==1.1.3`
+* Get Picard 2.23.8 from `https://github.com/broadinstitute/picard/releases/download/2.23.8/picard.jar`, and add the `.jar` file to `PATH`.
+* Install samtools 1.11
+* Install java runtime, for example `openjdk 11.0.8`.
+* Add scripts from directories `10xscell`, `diff`, `genome`, `pbam2bam` and `transcriptome` to `PATH`.
