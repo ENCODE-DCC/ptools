@@ -36,7 +36,10 @@ caper run -i <your_input.json> wdl/genome/make_pbam_genome.wdl -m metadata.json 
 If you are using singularity use `--singularity` option instead of `--docker`.
 
 After the run finishes, the `metadata.json` containing detailed information of the run is written. In `outputs` section of the `metadata.json` you will find the location of the `pbam` file.
+
 Assuming you are not intending anyone to be able to restore the information contained in the `bam` file, you are done. If you need to be able to reverse the transformation, you will need to create a `diff` file corresponding to your `bam`.
+
+Note that if your `bam` file was aligned to human transcriptome, then you can use the workflow located in `wdl/transcriptome/make_pbam_transcriptome.wdl`. For single-cell RNA-Seq data that was aligned to human reference genome using STAR, you can still use the workflow located in `wdl/genome/make_pbam_genome.wdl`.
 
 ## Making diff
 
