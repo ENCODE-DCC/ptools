@@ -14,7 +14,7 @@ WORKFLOW
 ---------------
 
 Making pbam
-_______________
+~~~~~~~~~~~~~~~
 
 As an example, assume you have a bam file, that originates from bulk RNA sequencing experiment, and it has been aligned to human GRCh38 reference and you want to make a privacy-aware bam from it. The workflow you need is located in `wdl/genome/make_pbam_genome.wdl`, and the input template in `wdl/genome/genome_pbam_input_template.json`. 
 Fill in the locations of your bam, and reference files into the template. Acceptable file storages in addition to your local machine are `https://`, `gs://`, `s3://`:
