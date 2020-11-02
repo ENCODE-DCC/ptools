@@ -1,20 +1,18 @@
-PTOOLS
-===============
+# PTOOLS
+
 WDL based workflows for BAM-to-PBAM-to-BAM conversions. For additional information on the protocol and file formats, see http://privaseq3.gersteinlab.org/docs/.
 
-REQUIREMENTS
----------------
+# REQUIREMENTS
+
 The workflows can be run using [caper](https://github.com/ENCODE-DCC/caper). Install caper following these [installation instructions](https://github.com/ENCODE-DCC/caper#installation).
 
-CONTENTS
----------------
+# CONTENTS
+
 In `wdl` directory you will find workflows for all the supported formats. Alongside with each wdl file, an input json template is provided.
 
-WORKFLOW
----------------
+# WORKFLOW
 
-Making pbam
-~~~~~~~~~~~~~~~
+## Making pbam
 
 As an example, assume you have a bam file, that originates from bulk RNA sequencing experiment, and it has been aligned to human GRCh38 reference and you want to make a privacy-aware bam from it. The workflow you need is located in `wdl/genome/make_pbam_genome.wdl`, and the input template in `wdl/genome/genome_pbam_input_template.json`. 
 Fill in the locations of your bam, and reference files into the template. Acceptable file storages in addition to your local machine are `https://`, `gs://`, `s3://`:
