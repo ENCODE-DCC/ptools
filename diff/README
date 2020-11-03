@@ -1,0 +1,6 @@
+usage: sh makeDiff.sh <bam>
+
+input: <bam> the bam file
+
+output: <bam_prefix>.diff diff file of the corresponding bam file. Named such that for a bam FOO.bam, the corresponding .diff file is named FOO.diff.
+

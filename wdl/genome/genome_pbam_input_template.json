@@ -1,0 +1,7 @@
+{
+    "genome.bam": "/path/to/the.bam",
+    "genome.reference_fasta": "/path/to/the/reference/used/to/align.the.bam.fasta",
+    "genome.cpu": 1,
+    "genome.memory_gb": 2,
+    "genome.disk": "local-disk 20 SSD"
+}
