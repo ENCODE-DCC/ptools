@@ -1,4 +1,4 @@
 Usage: sh makeFastq.sh <pbam>
 
-input: <pbam> is the source p.bam file.
+input: <pbam> is the source p.bam file, enter with full path.
 output: pbam_R1.fastq.gz, pbam_R2.fastq.gz, pbam_I1.fastq.gz 
