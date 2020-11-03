@@ -79,3 +79,5 @@ We recommend you run the WDL workflows, but it is also possible run the scripts 
 * Install samtools 1.11
 * Install java runtime, for example `openjdk 11.0.8`.
 * Add scripts from directories `10xscell`, `diff`, `genome`, `pbam2bam` and `transcriptome` to `PATH`.
+
+Additional READMEs for running the bash scripts are provided in each folder.
