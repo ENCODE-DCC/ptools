@@ -1,4 +1,4 @@
-Usage: sh makepBAM.sh <bam> <ref>
+Usage: sh makepBAM_genome.sh <bam> <ref>
 
 input: <bam> is the bam file you want to process
        <ref> is the reference genome fasta
