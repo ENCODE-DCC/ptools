@@ -1,4 +1,4 @@
-Usage: sh makepBAM.sh <bam> <gref> <tref> <gtf>
+Usage: sh makepBAM_transcriptome.sh <bam> <gref> <tref> <gtf>
 
 input: <bam>, name of the bam file
 <gref>, reference genome (path included)
