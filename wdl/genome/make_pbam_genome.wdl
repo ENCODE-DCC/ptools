@@ -1,5 +1,9 @@
 version 1.0
 
+
+import "../subworkflows/maybe_decompress.wdl" as reference
+
+
 workflow genome {
     meta {
         version:"1.0.0"
@@ -9,16 +13,26 @@ workflow genome {
 
     input {
        File bam
-       File reference_fasta
+       File? reference_fasta
+       File? reference_fasta_gz
        Int cpu
        Int memory_gb
        String disk
     }
 
+    call reference.maybe_decompress {
+        input:
+            input_plain=reference_fasta,
+            input_gz=reference_fasta_gz,
+            cpu=cpu,
+            memory_gb=memory_gb,
+            disk=disk
+    }
+
     call makepbam {
         input:
             bam=bam,
-            reference_fasta=reference_fasta,
+            reference_fasta=maybe_decompress.out,
             cpu=cpu,
             memory_gb=memory_gb,
             disk=disk,
