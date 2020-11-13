@@ -15,11 +15,23 @@ In `wdl` directory you will find workflows for all the supported formats. Alongs
 ## Making pbam
 
 As an example, assume you have a `bam` file, that originates from bulk RNA sequencing experiment, and it has been aligned to human GRCh38 reference and you want to make a privacy-aware bam from it. The workflow you need is located in `wdl/genome/make_pbam_genome.wdl`, and the input template in `wdl/genome/genome_pbam_input_template.json`. 
-Fill in the locations of your `bam`, and reference files into the template. Acceptable file storages in addition to your local machine are `https://`, `gs://`, `s3://`:
+Fill in the locations of your `bam`, and reference files into the template. Acceptable file storages in addition to your local machine are `https://`, `gs://`, `s3://`. In all the workflows there is an option to provide the reference files (reference genome, reference transcriptome and the annotation) as plain files, or as files compressed with gzip. If you want to use the gzipped file, you should add `_gz` suffix to the input parameter name (see the second example below).
 ```json
 {
     "genome.bam": "<your bam location here>",
     "genome.reference_fasta": "<GRCh38.fasta location here>",
+    "genome.cpu": 1,
+    "genome.memory_gb": 2,
+    "genome.disk": "local-disk 20 SSD"
+}
+```
+
+If you want to provide the reference genome as a compressed file, `genome.reference_fasta` needs to be changed into `genome.reference_fasta_gz`:
+
+```json
+{
+    "genome.bam": "<your bam location here>",
+    "genome.reference_fasta_gz": "<GRCh38.fasta.gz location here>",
     "genome.cpu": 1,
     "genome.memory_gb": 2,
     "genome.disk": "local-disk 20 SSD"
@@ -57,7 +69,8 @@ Memory and disk requirements and running is as above.
 ## Restoring bam
 
 To restore a regular `bam` from `pbam` and `diff` files you will need to use the workflow and input template located in `wdl/pbam2bam`. The process is very similar to the previous steps. Fill in the input files to the template:
-```
+
+```json
 {
     "pbam2bam.pbam": "<your pbam location here>",
     "pbam2bam.diff": "<corresponding diff location here>",
@@ -68,6 +81,21 @@ To restore a regular `bam` from `pbam` and `diff` files you will need to use the
     "pbam2bam.disk": "local-disk 20 SSD"
 }
 ```
+
+If you want to use a gzip-compressed reference file, use the following:
+
+```json
+{
+    "pbam2bam.pbam": "<your pbam location here>",
+    "pbam2bam.diff": "<corresponding diff location here>",
+    "pbam2bam.run_type": "genome",
+    "pbam2bam.reference_fasta_gz": "<reference fasta.gz location here>",
+    "pbam2bam.cpu": 1,
+    "pbam2bam.memory_gb": 2,
+    "pbam2bam.disk": "local-disk 20 SSD"
+}
+```
+
 Running and locating outputs is exactly same as before.
 
 # WITHOUT WDL/DOCKER
