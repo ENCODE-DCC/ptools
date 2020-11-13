@@ -1,5 +1,9 @@
 version 1.0
 
+
+import "../subworkflows/maybe_decompress.wdl" as reference
+
+
 workflow pbam2bam {
     meta {
         version:"1.0.0"
@@ -10,18 +14,28 @@ workflow pbam2bam {
     input {
         File pbam
         File diff
-        File reference_fasta
+        File? reference_fasta
+        File? reference_fasta_gz
         String run_type # genome or transcriptome
         Int cpu
         Int memory_gb
         String disk
     }
 
+    call reference.maybe_decompress {
+        input:
+            input_plain=reference_fasta,
+            input_gz=reference_fasta_gz,
+            cpu=cpu,
+            memory_gb=memory_gb,
+            disk=disk,
+    }
+
     call makebam {
         input:
             pbam=pbam,
             diff=diff,
-            reference_fasta=reference_fasta,
+            reference_fasta=maybe_decompress.out,
             run_type=run_type,
             cpu=cpu,
             memory_gb=memory_gb,
