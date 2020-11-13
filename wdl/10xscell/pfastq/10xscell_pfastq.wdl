@@ -2,9 +2,9 @@ version 1.0
 
 workflow tenxscell_pfastq {
     meta {
-        version:"1.0.0"
-        caper_docker:"encodedcc/ptools:1.0.0"
-        caper_singularity: "docker://encodedcc/ptools:1.0.0"
+        version:"1.0.1"
+        caper_docker:"encodedcc/ptools:1.0.1"
+        caper_singularity: "docker://encodedcc/ptools:1.0.1"
     }
 
     input {
