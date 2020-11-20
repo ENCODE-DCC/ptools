@@ -1,6 +1,6 @@
 version 1.0
 
-import "../subworkflows/maybe_decompress.wdl" as reference
+import "wdl/subworkflows/maybe_decompress.wdl" as reference
 
 
 workflow transcriptome {
