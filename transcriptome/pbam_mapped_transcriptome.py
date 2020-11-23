@@ -70,6 +70,8 @@ for lineB in fileB:
                 pbam[i] = "NM:i:0"
             if t[0] == "nM":
                 pbam[i] = "nM:i:0"
+	    if t[0] == "MC":
+                pbam[i] = "MC:Z:" + str(RL) + "M"
         chrom = str(pbam[2])
         startPos = int(pbam[3])
         k = ref.query(chrom, startPos - 1, int(RL))
