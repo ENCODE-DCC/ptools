@@ -22,19 +22,19 @@ import PrintSequence
 def ParseCigar(cigar):
 	l = []
 	num = ""
-    	for c in cigar:
-        	if c in '0123456789':
-            		num = num + c
-        	else:
-            		l.append([int(num), c])
-            		num = ""
+	for c in cigar:
+		if c in '0123456789':
+			num = num + c
+		else:
+			l.append([int(num), c])
+			num = ""
 	return (l) 
 
 
 
 #following is necessary for querying sequences from reference genome
 with open(sys.argv[1], 'rb') as f:
-    ref = PrintSequence.Lookup(f)
+	ref = PrintSequence.Lookup(f)
 
 bam = []
 import io
@@ -42,45 +42,45 @@ import io
 hed = open(sys.argv[2], "r")
 header = []
 for line in hed:
-    header.append(line.split('\n')[0])
+	header.append(line.split('\n')[0])
 hed.close()
 
 for i in range(0, len(header)):
-    print("%s" % header[i])
+	print("%s" % header[i])
 
 #fileB = sys.stdin
 fileB = open(sys.argv[3], "r")
 #RL=len(pbam[9])
 for lineB in fileB:
-    p = lineB.rstrip()
-    pbam = p.split('\t')
-    RL=len(pbam[9])
-    chrom=str(pbam[2])
-    if "chr" in chrom:
-    	parsedCigar=ParseCigar(pbam[5])
-	indicator=0
-	nColpbam = len(pbam)
+	p = lineB.rstrip()
+	pbam = p.split('\t')
+	RL=len(pbam[9])
+	chrom=str(pbam[2])
+	if "chr" in chrom:
+		parsedCigar=ParseCigar(pbam[5])
+		indicator=0
+		nColpbam = len(pbam)
 	for i in range(0, len(parsedCigar)):
 		if parsedCigar[i][1]=="D" or parsedCigar[i][1]=="S" or parsedCigar[i][1]=="H" or parsedCigar[i][1]=="X":
 			indicator=1
 	if indicator==0 and len(parsedCigar)>3:
 		pbam[5]=pbam[5]
 	else:
-    		for i in range(0, len(parsedCigar)):
+		for i in range(0, len(parsedCigar)):
 			if parsedCigar[i][1]=="N":
 				midpoint=i
 				break
-    		lenbeforemid=0
-    		delLength=0
-    		for i in range(0, midpoint):
+		lenbeforemid=0
+		delLength=0
+		for i in range(0, midpoint):
 			if parsedCigar[i][1]!="D":
 				lenbeforemid=lenbeforemid+int(parsedCigar[i][0])
 			if parsedCigar[i][1]=="D":
 				delLength=int(parsedCigar[i][0])
-    		lenaftermid=RL-lenbeforemid
-    		pbam[5]=str(lenbeforemid)+"M"+str(parsedCigar[midpoint][0])+"N"+str(lenaftermid)+"M"
-    		nColpbam = len(pbam)
-    		for i in range(0,nColpbam):
+		lenaftermid=RL-lenbeforemid
+		pbam[5]=str(lenbeforemid)+"M"+str(parsedCigar[midpoint][0])+"N"+str(lenaftermid)+"M"
+		nColpbam = len(pbam)
+		for i in range(0,nColpbam):
 			t=pbam[i].split(':')
 			if t[0]=="MD":
 				pbam[i]="MD:Z:"+str(RL)
@@ -90,29 +90,29 @@ for lineB in fileB:
 				pbam[i]="NM:i:0"
 			if t[0]=="nM":
 				pbam[i]="nM:i:0"
-    		if parsedCigar[0][1]=="S" or parsedCigar[0][1]=="D":
+		if parsedCigar[0][1]=="S" or parsedCigar[0][1]=="D":
 			startPos=int(pbam[3])-int(parsedCigar[0][0])+delLength
-    		else:
-    			startPos = int(pbam[3])+delLength
-    		seqbefore = ref.query(chrom, startPos - 1, int(lenbeforemid))
-    		seqafter = ref.query(chrom, startPos + lenbeforemid + parsedCigar[midpoint][0] - 1, int(lenaftermid))
-    		pbam[3]=startPos
-    		pbam[9] = seqbefore + seqafter
-    		if len(pbam[9]) < int(RL):
+		else:
+			startPos = int(pbam[3])+delLength
+		seqbefore = ref.query(chrom, startPos - 1, int(lenbeforemid))
+		seqafter = ref.query(chrom, startPos + lenbeforemid + parsedCigar[midpoint][0] - 1, int(lenaftermid))
+		pbam[3]=startPos
+		pbam[9] = seqbefore + seqafter
+		if len(pbam[9]) < int(RL):
 			b = len(pbam[9])
-            		a = int(RL) - len(pbam[9])
-            		for i in range(0, a):
-            			pbam[9] = pbam[9] + "N"
-	    			if b>lenbeforemid:
+			a = int(RL) - len(pbam[9])
+			for i in range(0, a):
+				pbam[9] = pbam[9] + "N"
+				if b>lenbeforemid:
 					pbam[5] = str(lenbeforemid)+"M"+str(parsedCigar[midpoint][0])+"N"+str(b-lenbeforemid)+"M"+str(a)+"S"
-	    			if b==lenbeforemid:
+				if b==lenbeforemid:
 					pbam[5] = str(lenbeforemid)+"M"+str(parsedCigar[midpoint][0])+"N"+str(a)+"S"
-	    			if b<lenbeforemid:
+				if b<lenbeforemid:
 					pbam[5] = str(b)+"M"+str(a)+"S"
-    nbam = str(pbam[0]) + '\t'
-    for i in range(1, nColpbam - 1):
-       	nbam = nbam + str(pbam[i]) + '\t'
-    nbam = nbam + str(pbam[nColpbam - 1])
-    print(nbam)
-    nbam = ''
-    bam = []
+	nbam = str(pbam[0]) + '\t'
+	for i in range(1, nColpbam - 1):
+		nbam = nbam + str(pbam[i]) + '\t'
+	nbam = nbam + str(pbam[nColpbam - 1])
+	print(nbam)
+	nbam = ''
+	bam = []
